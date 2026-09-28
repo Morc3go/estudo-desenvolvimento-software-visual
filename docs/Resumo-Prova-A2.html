@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Resumo Prova A2 — Desenvolvimento de Software Visual</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  :root { --azul:#1d4e89; --azul-claro:#e8f0fa; --verde:#1f7a4d; --verde-claro:#e6f4ec; --verm:#a3261b; --verm-claro:#fbeceb; --amar-claro:#fff6dc; --cinza:#555; }
+  * { box-sizing: border-box; }
+  body { font-family: "DejaVu Sans", "Segoe UI", Arial, sans-serif; font-size: 10.2pt; line-height: 1.45; color:#1a1a1a; margin:0; }
+  h1 { font-size: 21pt; color: var(--azul); margin: 0 0 4px; }
+  h2 { font-size: 14.5pt; color: #fff; background: var(--azul); padding: 5px 10px; border-radius: 4px; margin: 20px 0 10px; break-after: avoid; }
+  h3 { font-size: 11.5pt; color: var(--azul); border-bottom: 1.5px solid var(--azul-claro); padding-bottom: 2px; margin: 14px 0 6px; break-after: avoid; }
+  p { margin: 5px 0; }
+  ul, ol { margin: 4px 0 6px; padding-left: 20px; }
+  li { margin: 2px 0; }
+  code { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 8.9pt; background:#f1f3f6; padding: 0 3px; border-radius: 3px; }
+  pre { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 8.4pt; line-height: 1.38; background: #1e2430; color: #e6e9ef; padding: 8px 10px; border-radius: 5px; white-space: pre-wrap; margin: 6px 0 8px; break-inside: avoid; }
+  pre .c { color: #8fbf7f; }
+  pre .k { color: #7fb4ff; }
+  pre .s { color: #f0c27a; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.2pt; break-inside: avoid; }
+  th { background: var(--azul-claro); color: var(--azul); text-align: left; }
+  th, td { border: 1px solid #c9d3e0; padding: 3px 6px; vertical-align: top; }
+  .box { border-left: 4px solid var(--azul); background: var(--azul-claro); padding: 6px 10px; border-radius: 0 4px 4px 0; margin: 8px 0; break-inside: avoid; }
+  .dica { border-left-color: var(--verde); background: var(--verde-claro); }
+  .alerta { border-left-color: var(--verm); background: var(--verm-claro); }
+  .box b.t { display:block; margin-bottom: 2px; }
+  .capa { border: 2px solid var(--azul); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .sub { color: var(--cinza); font-size: 10.5pt; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .q { break-inside: avoid; margin: 8px 0; }
+  .gab { background: var(--amar-claro); border: 1px dashed #d6b85a; padding: 4px 8px; border-radius: 4px; margin-top: 3px; font-size: 9.4pt; }
+  .toc { columns: 2; font-size: 9.8pt; }
+  .toc li { margin: 1px 0; }
+  .pb { break-before: page; }
+  .small { font-size: 8.8pt; color: var(--cinza); }
+</style>
+</head>
+<body>
+
+<div class="capa">
+  <h1>Resumo para a Prova A2</h1>
+  <div class="sub"><b>Desenvolvimento de Software Visual</b>. Ciência da Computação, 4º semestre, 2026/2.<br>
+  Prof. Diogo Steinke Deconto. Prova A2: <b>28/09/2026</b>.</div>
+  <p style="margin-top:8px">O que foi visto até a prova, pelo calendário de aulas:</p>
+  <table>
+    <tr><th>Data</th><th>Aula</th><th>Neste resumo</th></tr>
+    <tr><td>10/08</td><td>Apresentação, configuração de ambiente, ambientação ao C#</td><td>§1, §8</td></tr>
+    <tr><td>17/08</td><td>C#: orientação a objetos, classe, atributos, getters/setters, objetos</td><td>§2</td></tr>
+    <tr><td>24/08</td><td>Minimal APIs: funcionamento da web, criação do projeto, GET e POST</td><td>§3, §4</td></tr>
+    <tr><td>31/08 e 01/09</td><td>Minimal APIs: GET, POST, PUT, PATCH e DELETE</td><td>§4, §5</td></tr>
+    <tr><td>14 e 21/09</td><td>Minimal APIs: persistência com Entity Framework</td><td>§6</td></tr>
+  </table>
+  <ol class="toc">
+    <li>Fundamentos de C#</li>
+    <li>Orientação a Objetos</li>
+    <li>Como a Web funciona: HTTP, REST, JSON</li>
+    <li>Minimal APIs no ASP.NET Core</li>
+    <li>Código da aula comentado + CRUD</li>
+    <li>Entity Framework Core</li>
+    <li>Lista de exercícios (Bubble Sort)</li>
+    <li>Comandos da CLI (dotnet)</li>
+    <li>Pegadinhas de prova</li>
+    <li>Questões de revisão com gabarito</li>
+    <li>Folha de cola final</li>
+  </ol>
+</div>
+
+<!-- ================================================================== -->
+<h2>1. Fundamentos de C#</h2>
+
+<h3>1.1 Estrutura de um programa</h3>
+<p>Desde o .NET 6 existem os <b>top-level statements</b>: o <code>Program.cs</code> pode ter o código direto, sem
+<code>class Program { static void Main() }</code>, porque o compilador gera isso. Com <code>&lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;</code>
+no <code>.csproj</code>, namespaces como <code>System</code>, <code>System.Linq</code> e <code>System.Collections.Generic</code> já vêm importados.</p>
+<pre><span class="c">// Program.cs de um projeto console</span>
+Console.Clear();
+Console.WriteLine(<span class="s">"Olá, mundo!"</span>);   <span class="c">// imprime e pula linha</span>
+Console.Write(<span class="s">"sem pular "</span>);         <span class="c">// imprime sem pular linha</span>
+<span class="k">string</span>? linha = Console.ReadLine(); <span class="c">// lê do teclado (sempre string, pode ser null)</span></pre>
+
+<h3>1.2 Tipos de dados</h3>
+<table>
+<tr><th>Tipo</th><th>Exemplo</th><th>Observação</th></tr>
+<tr><td><code>int</code></td><td><code>int idade = 20;</code></td><td>inteiro de 32 bits</td></tr>
+<tr><td><code>long</code></td><td><code>long x = 10L;</code></td><td>inteiro de 64 bits</td></tr>
+<tr><td><code>double</code></td><td><code>double h = 1.75;</code></td><td>decimal padrão (literal sem sufixo)</td></tr>
+<tr><td><code>float</code></td><td><code>float p = 70.5f;</code></td><td>precisa do sufixo <code>f</code></td></tr>
+<tr><td><code>decimal</code></td><td><code>decimal preco = 19.90m;</code></td><td>sufixo <code>m</code>, ideal para dinheiro</td></tr>
+<tr><td><code>bool</code></td><td><code>bool ativo = true;</code></td><td><code>true</code>/<code>false</code></td></tr>
+<tr><td><code>char</code></td><td><code>char c = 'A';</code></td><td>aspas <b>simples</b></td></tr>
+<tr><td><code>string</code></td><td><code>string n = "Ana";</code></td><td>aspas <b>duplas</b>, tipo por referência</td></tr>
+<tr><td><code>var</code></td><td><code>var cidade = "Curitiba";</code></td><td>tipo inferido na compilação (continua tipado!)</td></tr>
+<tr><td><code>const</code></td><td><code>const double PI = 3.14;</code></td><td>valor fixo</td></tr>
+</table>
+<p><b>Nullable:</b> <code>string?</code> e <code>Produto?</code> dizem que a variável pode ser <code>null</code>. Com <code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>
+o compilador avisa quando você usa algo que pode ser nulo sem checar. Por isso a API faz <code>if (produto is null)</code>.</p>
+
+<h3>1.3 Conversões e strings</h3>
+<pre><span class="k">int</span> n = <span class="k">int</span>.Parse(<span class="s">"42"</span>);                 <span class="c">// lança FormatException se inválido</span>
+<span class="k">bool</span> ok = <span class="k">int</span>.TryParse(<span class="s">"abc"</span>, <span class="k">out int</span> r); <span class="c">// ok = false, r = 0 (não lança)</span>
+<span class="k">double</span> d = Convert.ToDouble(<span class="s">"2.5"</span>);
+<span class="k">double</span> m = (<span class="k">double</span>)17 / 5;             <span class="c">// cast: 3.4 (sem cast: 17/5 = 3)</span>
+<span class="k">string</span> s = <span class="s">$"Nome: {nome}, preço: {preco:F2}"</span>; <span class="c">// interpolação</span></pre>
+
+<h3>1.4 Operadores</h3>
+<p>Aritméticos <code>+ - * / %</code>. <b>Atenção:</b> <code>/</code> entre dois <code>int</code> é divisão <b>inteira</b> (<code>17/5 = 3</code>). <code>%</code> é o resto (<code>17%5 = 2</code>).
+Relacionais <code>== != &gt; &lt; &gt;= &lt;=</code>. Lógicos <code>&amp;&amp;</code> (E), <code>||</code> (OU), <code>!</code> (NÃO). Incremento <code>i++</code>, <code>+=</code>.
+Ternário: <code>cond ? valorSeVerdadeiro : valorSeFalso</code>.</p>
+
+<h3>1.5 Decisão e repetição</h3>
+<div class="grid2">
+<pre><span class="k">if</span> (nota &gt;= 7) { ... }
+<span class="k">else if</span> (nota &gt;= 4) { ... }
+<span class="k">else</span> { ... }
+
+<span class="k">switch</span> (dia) {
+  <span class="k">case</span> 1: ...; <span class="k">break</span>;
+  <span class="k">default</span>: ...; <span class="k">break</span>;
+}</pre>
+<pre><span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; 10; i++) { }  <span class="c">// nº conhecido</span>
+<span class="k">while</span> (cond) { }        <span class="c">// testa ANTES</span>
+<span class="k">do</span> { } <span class="k">while</span> (cond);    <span class="c">// executa 1x no mínimo</span>
+<span class="k">foreach</span> (<span class="k">var</span> x <span class="k">in</span> lista) { } <span class="c">// percorre tudo</span>
+<span class="c">// break: sai do laço | continue: pula p/ próxima volta</span></pre>
+</div>
+
+<h3>1.6 Vetor (array) × Lista (List&lt;T&gt;)</h3>
+<table>
+<tr><th></th><th>Vetor <code>int[]</code></th><th>Lista <code>List&lt;int&gt;</code></th></tr>
+<tr><td>Tamanho</td><td><b>Fixo</b>, definido na criação</td><td><b>Dinâmico</b>, cresce e diminui</td></tr>
+<tr><td>Criar</td><td><code>new int[100]</code> ou <code>{1, 2, 3}</code></td><td><code>new List&lt;int&gt;()</code> ou <code>new()</code></td></tr>
+<tr><td>Tamanho atual</td><td><code>vetor.Length</code></td><td><code>lista.Count</code></td></tr>
+<tr><td>Adicionar / remover</td><td>não dá</td><td><code>Add(x)</code>, <code>Remove(x)</code>, <code>RemoveAt(i)</code></td></tr>
+<tr><td>Outros</td><td><code>Array.Sort(v)</code>, <code>Array.Reverse(v)</code></td><td><code>Contains</code>, <code>IndexOf</code>, <code>Clear</code>, <code>Sort</code></td></tr>
+</table>
+<p>Índices vão de <code>0</code> a <code>Length-1</code>. Acessar fora disso gera <code>IndexOutOfRangeException</code> no vetor e <code>ArgumentOutOfRangeException</code> na lista.
+Um <code>new int[5]</code> começa com zeros. <code>Random r = new Random(); r.Next(1000)</code> sorteia de <b>0 a 999</b>. <code>r.Next(1, 7)</code> sorteia de 1 a 6.</p>
+
+<h3>1.7 Métodos</h3>
+<pre><span class="k">static int</span> Somar(<span class="k">int</span> a, <span class="k">int</span> b) { <span class="k">return</span> a + b; }  <span class="c">// retorno int</span>
+<span class="k">static void</span> Saudar(<span class="k">string</span> n) =&gt; Console.WriteLine(<span class="s">$"Oi {n}"</span>); <span class="c">// void = não retorna</span></pre>
+<p><b>Assinatura</b> = nome + parâmetros. <b>Sobrecarga</b> (overload) = mesmo nome com parâmetros diferentes.</p>
+
+<h3>1.8 LINQ e expressões lambda</h3>
+<p>Uma <b>lambda</b> é uma função anônima: <code>p =&gt; p.Preco &gt; 100</code> quer dizer "recebe <code>p</code> e devolve se o preço é maior que 100".
+O <b>LINQ</b> (Language Integrated Query) consulta coleções com essas lambdas. No Entity Framework, a mesma consulta é traduzida para <b>SQL</b>.</p>
+<table>
+<tr><th>Método</th><th>Faz</th><th>Equivale em SQL</th></tr>
+<tr><td><code>Where(p =&gt; ...)</code></td><td>filtra</td><td><code>WHERE</code></td></tr>
+<tr><td><code>OrderBy / OrderByDescending</code></td><td>ordena</td><td><code>ORDER BY</code></td></tr>
+<tr><td><code>Select(p =&gt; p.Nome)</code></td><td>projeta/transforma</td><td><code>SELECT Nome</code></td></tr>
+<tr><td><code>FirstOrDefault(p =&gt; ...)</code></td><td>1º que satisfaz, ou <code>null</code>/padrão</td><td><code>... LIMIT 1</code></td></tr>
+<tr><td><code>Any(p =&gt; ...)</code></td><td>existe algum? (<code>bool</code>)</td><td><code>EXISTS</code></td></tr>
+<tr><td><code>Count() / Sum() / Max() / Min() / Average()</code></td><td>agregações</td><td><code>COUNT/SUM/...</code></td></tr>
+<tr><td><code>ToList()</code></td><td>executa a consulta e materializa a lista</td><td>(executa)</td></tr>
+</table>
+
+<h3>1.9 Exceções</h3>
+<pre><span class="k">try</span> { <span class="k">int</span> x = 10 / zero; }
+<span class="k">catch</span> (DivideByZeroException e) { Console.WriteLine(e.Message); }
+<span class="k">finally</span> { <span class="c">/* sempre executa */</span> }
+<span class="k">throw new</span> ArgumentException(<span class="s">"mensagem"</span>);   <span class="c">// lançar uma exceção</span></pre>
+
+<!-- ================================================================== -->
+<h2 class="pb">2. Orientação a Objetos (POO)</h2>
+
+<h3>2.1 Conceitos</h3>
+<table>
+<tr><th>Termo</th><th>Definição curta</th></tr>
+<tr><td><b>Classe</b></td><td>Molde, tipo. Define atributos (dados) e métodos (comportamentos). Ex.: <code>class Produto</code>.</td></tr>
+<tr><td><b>Objeto</b></td><td>Instância concreta de uma classe, criada com <code>new</code>. Ex.: <code>new Produto()</code>.</td></tr>
+<tr><td><b>Atributo / campo</b></td><td>Variável que pertence ao objeto e guarda o estado dele.</td></tr>
+<tr><td><b>Propriedade</b></td><td>Jeito C# de expor um atributo com <code>get</code>/<code>set</code>.</td></tr>
+<tr><td><b>Método</b></td><td>Função da classe, o que o objeto sabe fazer.</td></tr>
+<tr><td><b>Construtor</b></td><td>Método especial, mesmo nome da classe, sem retorno. Roda no <code>new</code>.</td></tr>
+<tr><td><b>Encapsulamento</b></td><td>Esconder os dados (<code>private</code>) e dar acesso controlado (get/set com validação).</td></tr>
+<tr><td><b>Herança</b></td><td>Classe filha reaproveita a mãe: <code>class Aluno : Pessoa</code> ("é um").</td></tr>
+<tr><td><b>Polimorfismo</b></td><td>Mesmo método, comportamento diferente conforme o tipo real (<code>virtual</code>/<code>override</code>).</td></tr>
+<tr><td><b>Abstração</b></td><td>Modelar só o que importa. Classes <code>abstract</code> e interfaces.</td></tr>
+<tr><td><b>Interface</b></td><td>Contrato: diz <i>o que</i> a classe tem, não <i>como</i>. <code>interface IAvaliador</code>.</td></tr>
+</table>
+
+<h3>2.2 Getters e setters: do jeito "Java" à propriedade C#</h3>
+<pre><span class="k">public class</span> Pessoa
+{
+    <span class="c">// 1) Campo privado + métodos Get/Set (estilo Java)</span>
+    <span class="k">private string</span> _cpf = <span class="k">string</span>.Empty;
+    <span class="k">public string</span> GetCpf() { <span class="k">return</span> _cpf; }
+    <span class="k">public void</span> SetCpf(<span class="k">string</span> cpf)
+    {
+        <span class="k">if</span> (cpf.Length != 11) <span class="k">throw new</span> ArgumentException(<span class="s">"CPF inválido"</span>);
+        _cpf = cpf;
+    }
+
+    <span class="c">// 2) Propriedade AUTOMÁTICA: o compilador cria o campo escondido</span>
+    <span class="k">public string</span> Nome { <span class="k">get</span>; <span class="k">set</span>; } = <span class="k">string</span>.Empty;
+
+    <span class="c">// 3) Propriedade COMPLETA, com validação no set ("value" = valor atribuído)</span>
+    <span class="k">private int</span> _idade;
+    <span class="k">public int</span> Idade
+    {
+        <span class="k">get</span> { <span class="k">return</span> _idade; }
+        <span class="k">set</span> { <span class="k">if</span> (value &lt; 0) <span class="k">throw new</span> ArgumentException(<span class="s">"negativa"</span>); _idade = value; }
+    }
+
+    <span class="c">// 4) Somente leitura, calculada</span>
+    <span class="k">public bool</span> MaiorDeIdade =&gt; Idade &gt;= 18;
+
+    <span class="k">public</span> Pessoa() { }                                         <span class="c">// construtor vazio</span>
+    <span class="k">public</span> Pessoa(<span class="k">string</span> nome, <span class="k">int</span> idade) { Nome = nome; Idade = idade; } <span class="c">// sobrecarga</span>
+
+    <span class="k">public virtual string</span> Apresentar() =&gt; <span class="s">$"Sou {Nome}"</span>;
+}</pre>
+<pre><span class="c">// Três formas de criar objetos</span>
+Pessoa p1 = <span class="k">new</span> Pessoa();  p1.Nome = <span class="s">"Ana"</span>;  p1.Idade = 17;
+Pessoa p2 = <span class="k">new</span> Pessoa(<span class="s">"Bruno"</span>, 30);                   <span class="c">// construtor</span>
+Pessoa p3 = <span class="k">new</span> Pessoa { Nome = <span class="s">"Carla"</span>, Idade = 25 };   <span class="c">// inicializador de objeto</span></pre>
+
+<h3>2.3 Modificadores de acesso</h3>
+<table>
+<tr><th>Modificador</th><th>Quem acessa</th></tr>
+<tr><td><code>public</code></td><td>qualquer código</td></tr>
+<tr><td><code>private</code></td><td>só a própria classe (<b>padrão</b> dos membros de classe)</td></tr>
+<tr><td><code>protected</code></td><td>a própria classe e as filhas</td></tr>
+<tr><td><code>internal</code></td><td>o mesmo projeto/assembly (<b>padrão</b> das classes)</td></tr>
+</table>
+
+<h3>2.4 Herança, polimorfismo e interface</h3>
+<pre><span class="k">public class</span> Aluno : Pessoa                                   <span class="c">// herança</span>
+{
+    <span class="k">public string</span> Matricula { <span class="k">get</span>; <span class="k">set</span>; } = <span class="s">""</span>;
+    <span class="k">public</span> Aluno(<span class="k">string</span> n, <span class="k">int</span> i, <span class="k">string</span> m) : <span class="k">base</span>(n, i) { Matricula = m; } <span class="c">// chama construtor da mãe</span>
+    <span class="k">public override string</span> Apresentar() =&gt; <span class="k">base</span>.Apresentar() + <span class="s">$" ({Matricula})"</span>;
+}
+<span class="k">public interface</span> IAvaliador { <span class="k">double</span> Avaliar(Aluno a); }
+<span class="k">public class</span> Professor : Pessoa, IAvaliador { ... }           <span class="c">// 1 classe mãe + N interfaces</span>
+
+List&lt;Pessoa&gt; pessoas = <span class="k">new</span>() { <span class="k">new</span> Pessoa(...), <span class="k">new</span> Aluno(...) };
+<span class="k">foreach</span> (<span class="k">var</span> p <span class="k">in</span> pessoas) Console.WriteLine(p.Apresentar()); <span class="c">// polimorfismo</span></pre>
+<div class="box"><b class="t">Lembre</b>C# tem herança <b>simples</b> de classes (só uma mãe) e pode implementar <b>várias interfaces</b>.
+Só dá para usar <code>override</code> em método marcado <code>virtual</code> ou <code>abstract</code> na mãe. Toda classe herda de <code>object</code>
+(por isso existe <code>ToString()</code>).</div>
+
+<h3>2.5 Relacionamento entre classes</h3>
+<ul>
+<li><b>Associação / composição ("tem um"):</b> <code>public Professor? Professor { get; set; }</code></li>
+<li><b>1 para N ("tem vários"):</b> <code>public List&lt;Aluno&gt; Alunos { get; set; } = new();</code></li>
+<li><b>Herança ("é um"):</b> <code>Aluno : Pessoa</code></li>
+</ul>
+<pre><span class="k">public class</span> Turma
+{
+    <span class="k">public</span> Professor? Professor { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">public</span> List&lt;Aluno&gt; Alunos { <span class="k">get</span>; <span class="k">set</span>; } = <span class="k">new</span>();
+    <span class="k">public void</span> Matricular(Aluno a) { <span class="k">if</span> (!Alunos.Any(x =&gt; x.Matricula == a.Matricula)) Alunos.Add(a); }
+}</pre>
+<div class="box alerta"><b class="t">Referência × valor</b>Classes são <b>tipos por referência</b>: <code>Pessoa b = a;</code> copia só o endereço, então mudar <code>b.Nome</code> muda <code>a.Nome</code>.
+<code>int</code>, <code>double</code>, <code>bool</code>, <code>char</code> e <code>struct</code> são <b>por valor</b> (a atribuição copia o valor).</div>
+
+<!-- ================================================================== -->
+<h2 class="pb">3. Como a Web funciona: HTTP, REST e JSON</h2>
+
+<h3>3.1 Cliente-servidor</h3>
+<p>O <b>cliente</b> (navegador, app, Postman, REST Client) envia uma <b>requisição</b>. O <b>servidor</b> (a nossa API) processa e devolve uma <b>resposta</b>.
+O HTTP é <b>sem estado</b> (stateless): cada requisição é independente.</p>
+<div class="grid2">
+<div class="box"><b class="t">Requisição tem</b>
+<ul><li><b>Método HTTP</b> (GET, POST...)</li><li><b>URL</b> (endereço/rota)</li><li>Cabeçalhos (ex.: <code>Content-Type: application/json</code>)</li><li>Opcional: <b>corpo</b> (JSON) ou <b>parâmetros na URL</b></li></ul></div>
+<div class="box"><b class="t">Resposta tem</b>
+<ul><li><b>Código de status HTTP</b> (200, 404...)</li><li>Cabeçalhos</li><li>Corpo: o dado, informação ou mensagem</li></ul></div>
+</div>
+<p class="small">Essa divisão aparece nos comentários do <code>Program.cs</code> da aula: "Requisições: método HTTP, URL, opcional corpo/parâmetros de URL. Resposta: dado/informação/mensagem, código de status HTTP".</p>
+
+<h3>3.2 Anatomia de uma URL</h3>
+<pre>http://localhost:5195/api/produto/buscar/Mouse?ordem=preco
+└─┬─┘  └───┬───┘ └┬─┘ └──────────┬─────────┘ └────┬─────┘
+protocolo host  porta      rota (path)        query string
+                                 └ "Mouse" = parâmetro de ROTA {nome}</pre>
+
+<h3>3.3 Métodos HTTP (verbos) e CRUD</h3>
+<table>
+<tr><th>Método</th><th>CRUD</th><th>Uso</th><th>Tem corpo?</th><th>Idempotente?</th><th>Status típico</th></tr>
+<tr><td><b>GET</b></td><td>Read</td><td>buscar/listar</td><td>não</td><td>sim</td><td>200 OK, 404</td></tr>
+<tr><td><b>POST</b></td><td>Create</td><td>cadastrar</td><td>sim</td><td><b>não</b></td><td>201 Created, 400</td></tr>
+<tr><td><b>PUT</b></td><td>Update</td><td>alterar <b>o recurso inteiro</b></td><td>sim</td><td>sim</td><td>200 OK, 404</td></tr>
+<tr><td><b>PATCH</b></td><td>Update</td><td>alterar <b>parte</b> do recurso</td><td>sim (ou query)</td><td>não necessariamente</td><td>200 OK, 404</td></tr>
+<tr><td><b>DELETE</b></td><td>Delete</td><td>remover</td><td>normalmente não</td><td>sim</td><td>200 / 204, 404</td></tr>
+</table>
+<p class="small"><b>Idempotente</b> = repetir a mesma requisição várias vezes deixa o servidor no mesmo estado que uma vez só. Dez POSTs criam dez produtos. Dez DELETEs do mesmo id deixam o produto removido (os seguintes só devolvem 404).</p>
+
+<h3>3.4 Códigos de status</h3>
+<table>
+<tr><th>Faixa</th><th>Significado</th><th>Principais</th><th>No C# (<code>Results.</code>)</th></tr>
+<tr><td>1xx</td><td>Informativo</td><td>100 Continue</td><td>—</td></tr>
+<tr><td>2xx</td><td><b>Sucesso</b></td><td>200 OK · 201 Created · 204 No Content</td><td><code>Ok()</code> · <code>Created()</code> · <code>NoContent()</code></td></tr>
+<tr><td>3xx</td><td>Redirecionamento</td><td>301 · 302 · 304</td><td><code>Redirect()</code></td></tr>
+<tr><td>4xx</td><td><b>Erro do cliente</b></td><td>400 Bad Request · 401 Unauthorized · 403 Forbidden · 404 Not Found · 409 Conflict</td><td><code>BadRequest()</code> · <code>Unauthorized()</code> · <code>Forbid()</code> · <code>NotFound()</code> · <code>Conflict()</code></td></tr>
+<tr><td>5xx</td><td><b>Erro do servidor</b></td><td>500 Internal Server Error · 503</td><td><code>Problem()</code> / exceção não tratada</td></tr>
+</table>
+
+<h3>3.5 REST e API</h3>
+<ul>
+<li><b>API</b> (Application Programming Interface): um conjunto de endpoints que outro programa (o front-end em React, por exemplo) consome.</li>
+<li><b>Web API</b>: API acessada por HTTP.</li>
+<li><b>REST</b> (Representational State Transfer): estilo de arquitetura em que tudo é <b>recurso</b> identificado por URL (<code>/api/produto</code>),
+manipulado pelos <b>verbos HTTP</b>, com comunicação <b>sem estado</b> e representação geralmente em <b>JSON</b>. Uma API que segue isso é chamada de <b>RESTful</b>.</li>
+<li><b>Endpoint</b>: a combinação <b>método + rota</b> que executa uma funcionalidade. <code>GET /api/produto/listar</code> e <code>POST /api/produto/cadastrar</code> são endpoints diferentes.</li>
+</ul>
+
+<h3>3.6 JSON</h3>
+<p>JSON (JavaScript Object Notation) é um formato de texto para trocar dados. Tem objetos <code>{ }</code> com pares <code>"chave": valor</code>, listas <code>[ ]</code>,
+strings entre aspas duplas, números, <code>true</code>/<code>false</code> e <code>null</code>.</p>
+<div class="grid2">
+<pre>{
+  <span class="s">"id"</span>: <span class="s">"1d27...bd19"</span>,
+  <span class="s">"nome"</span>: <span class="s">"Mouse"</span>,
+  <span class="s">"preco"</span>: 50,
+  <span class="s">"quantidade"</span>: 10,
+  <span class="s">"criadoEm"</span>: <span class="s">"2026-09-28T13:02:41"</span>
+}</pre>
+<div>
+<p><b>Serialização:</b> objeto C# → JSON (na resposta). <b>Desserialização:</b> JSON → objeto C# (o corpo do POST vira um <code>Produto</code>).</p>
+<p>O ASP.NET faz isso sozinho (System.Text.Json). As propriedades em <b>PascalCase</b> do C# (<code>Nome</code>) viram <b>camelCase</b> no JSON (<code>nome</code>),
+e a leitura não diferencia maiúsculas de minúsculas.</p>
+</div>
+</div>
+
+<!-- ================================================================== -->
+<h2 class="pb">4. Minimal APIs no ASP.NET Core</h2>
+
+<h3>4.1 O que é</h3>
+<p><b>ASP.NET Core</b> é o framework web do .NET. As <b>Minimal APIs</b> declaram endpoints direto no <code>Program.cs</code> com <code>app.MapGet/MapPost/...</code>
+e uma lambda, sem precisar de <i>Controllers</i> (o modelo MVC/Web API "tradicional"). O projeto é criado com <code>dotnet new web</code>.</p>
+
+<h3>4.2 Esqueleto</h3>
+<pre><span class="k">var</span> builder = WebApplication.CreateBuilder(args); <span class="c">// 1. configura: serviços, DI, config</span>
+<span class="c">// builder.Services.AddDbContext&lt;AppDataContext&gt;();  (registrar serviços AQUI)</span>
+<span class="k">var</span> app = builder.Build();                         <span class="c">// 2. constrói a aplicação</span>
+
+app.MapGet(<span class="s">"/"</span>, () =&gt; <span class="s">"API do Ecommerce"</span>);        <span class="c">// 3. mapeia endpoints</span>
+
+app.Run();                                          <span class="c">// 4. sobe o servidor (bloqueia; o que vier depois não roda)</span></pre>
+
+<h3>4.3 Mapeando os verbos</h3>
+<table>
+<tr><th>Método</th><th>Exemplo</th></tr>
+<tr><td><code>app.MapGet</code></td><td><code>app.MapGet("/api/produto/listar", () =&gt; ...)</code></td></tr>
+<tr><td><code>app.MapPost</code></td><td><code>app.MapPost("/api/produto/cadastrar", (Produto produto) =&gt; ...)</code></td></tr>
+<tr><td><code>app.MapPut</code></td><td><code>app.MapPut("/api/produto/alterar/{id}", (string id, Produto p) =&gt; ...)</code></td></tr>
+<tr><td><code>app.MapPatch</code></td><td><code>app.MapPatch("/api/produto/estoque/{id}", (string id, int quantidade) =&gt; ...)</code></td></tr>
+<tr><td><code>app.MapDelete</code></td><td><code>app.MapDelete("/api/produto/remover/{id}", (string id) =&gt; ...)</code></td></tr>
+</table>
+
+<h3>4.4 De onde vêm os parâmetros (binding)</h3>
+<table>
+<tr><th>Origem</th><th>Atributo explícito</th><th>Exemplo</th><th>Regra quando não se usa o atributo</th></tr>
+<tr><td><b>Rota</b></td><td><code>[FromRoute]</code></td><td><code>/buscar/{nome}</code> + <code>(string nome)</code></td><td>o nome do parâmetro bate com <code>{...}</code> na rota</td></tr>
+<tr><td><b>Query string</b></td><td><code>[FromQuery]</code></td><td><code>/estoque/{id}?quantidade=5</code></td><td>tipo simples que <b>não</b> está na rota</td></tr>
+<tr><td><b>Corpo (JSON)</b></td><td><code>[FromBody]</code></td><td><code>(Produto produto)</code></td><td>tipo complexo (classe), em POST/PUT/PATCH</td></tr>
+<tr><td><b>Serviço (DI)</b></td><td><code>[FromServices]</code></td><td><code>(AppDataContext ctx)</code></td><td>tipo registrado em <code>builder.Services</code></td></tr>
+</table>
+<p class="small"><code>[FromRoute]</code>, <code>[FromQuery]</code>, <code>[FromBody]</code> e <code>[FromServices]</code> vêm de <code>using Microsoft.AspNetCore.Mvc;</code>.</p>
+
+<h3>4.5 Retornos: a classe <code>Results</code></h3>
+<p>O endpoint devolve um <code>IResult</code> com status e corpo: <code>Results.Ok(obj)</code> → 200, <code>Results.Created(url, obj)</code> → 201,
+<code>Results.NoContent()</code> → 204, <code>Results.BadRequest(msg)</code> → 400, <code>Results.NotFound(msg)</code> → 404, <code>Results.Conflict(msg)</code> → 409.
+Se a lambda devolve uma <code>string</code> simples, sai 200 com texto puro. Se devolve um objeto, sai 200 com JSON.</p>
+<div class="box alerta"><b class="t">Pegadinha</b>Quando a lambda tem vários <code>return</code>, todos precisam devolver <code>Results.X(...)</code> (o mesmo tipo <code>IResult</code>).
+Misturar <code>return produtos;</code> com <code>return Results.NotFound()</code> não compila.</div>
+
+<h3>4.6 Rodando e testando</h3>
+<ul>
+<li><code>dotnet run</code> (ou <code>dotnet watch run</code>, que reinicia sozinho quando o código muda). A porta vem de <code>Properties/launchSettings.json</code>
+(<code>"applicationUrl": "http://localhost:5195"</code>). <code>appsettings.json</code> guarda configurações como logging e connection strings.</li>
+<li>Para testar: navegador (só GET), <b>Postman</b>, <b>Insomnia</b>, a extensão <b>REST Client</b> do VS Code com arquivo <code>.http</code>, ou <code>curl</code>.</li>
+</ul>
+<pre><span class="c">### Arquivo Tests/Produto.http (REST Client). "###" separa as requisições</span>
+GET http://localhost:5195/api/produto/listar
+
+<span class="c">###</span>
+POST http://localhost:5195/api/produto/cadastrar
+Content-Type: application/json
+                                   <span class="c">&lt;- linha em branco OBRIGATÓRIA antes do corpo</span>
+{ <span class="s">"nome"</span>: <span class="s">"Teclado"</span>, <span class="s">"preco"</span>: 150, <span class="s">"quantidade"</span>: 5 }</pre>
+
+<!-- ================================================================== -->
+<h2 class="pb">5. Código da aula comentado + CRUD completo</h2>
+
+<h3>5.1 Modelo</h3>
+<pre><span class="k">public class</span> Produto
+{
+    <span class="k">public string</span> Id { <span class="k">get</span>; <span class="k">set</span>; } = Guid.NewGuid().ToString(); <span class="c">// id único gerado ao criar o objeto</span>
+    <span class="k">public string</span> Nome { <span class="k">get</span>; <span class="k">set</span>; } = String.Empty;
+    <span class="k">public</span> DateTime CriadoEm { <span class="k">get</span>; <span class="k">set</span>; } = DateTime.Now;     <span class="c">// data/hora da criação</span>
+}</pre>
+<p><b>GUID</b> (Globally Unique Identifier) é um identificador de 128 bits, praticamente impossível de repetir, por exemplo <code>1d274707-7f49-45f1-a066-f34c3697bd19</code>.
+Os valores depois do <code>=</code> são <b>inicializadores de propriedade</b>: rodam em todo <code>new Produto()</code>, inclusive quando o JSON é desserializado.</p>
+
+<h3>5.2 Endpoints da aula (GET e POST), explicados</h3>
+<pre>List&lt;Produto&gt; produtos = <span class="k">new</span> List&lt;Produto&gt;();   <span class="c">// "banco" EM MEMÓRIA: some quando a API para</span>
+
+app.MapGet(<span class="s">"/api/produto/listar"</span>, () =&gt;
+{
+    <span class="k">if</span> (produtos.Count == 0) <span class="k">return</span> Results.BadRequest(<span class="s">"A lista de produtos está vazia"</span>);
+    <span class="k">return</span> Results.Ok(produtos);                    <span class="c">// 200 + JSON da lista</span>
+});
+
+app.MapPost(<span class="s">"/api/produto/cadastrar"</span>, (Produto? produto) =&gt;   <span class="c">// vem do CORPO (JSON)</span>
+{
+    <span class="k">if</span> (produto <span class="k">is null</span>) <span class="k">return</span> Results.BadRequest(<span class="s">"O produto não pode ser nulo"</span>);
+    <span class="k">if</span> (produto.Nome == <span class="s">""</span>) <span class="k">return</span> Results.BadRequest(<span class="s">"O nome não pode ser vazio"</span>);
+    <span class="k">foreach</span> (Produto cadastrado <span class="k">in</span> produtos)        <span class="c">// regra: nome único</span>
+        <span class="k">if</span> (cadastrado.Nome == produto.Nome) <span class="k">return</span> Results.BadRequest(<span class="s">"Já existe um produto com o mesmo nome"</span>);
+    produtos.Add(produto);
+    <span class="k">return</span> Results.Created(<span class="s">""</span>, produto);           <span class="c">// 201 Created</span>
+});
+
+app.MapGet(<span class="s">"/api/produto/buscar/{nome}"</span>, (<span class="k">string</span> nome) =&gt;   <span class="c">// vem da ROTA</span>
+{
+    <span class="k">foreach</span> (Produto cadastrado <span class="k">in</span> produtos)
+        <span class="k">if</span> (cadastrado.Nome == nome) <span class="k">return</span> Results.Ok(cadastrado);
+    <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>); <span class="c">// 404</span>
+});</pre>
+
+<h3>5.3 Exercício da aula resolvido: remoção e alteração</h3>
+<pre><span class="c">//DELETE: /api/produto/remover/{id}</span>
+app.MapDelete(<span class="s">"/api/produto/remover/{id}"</span>, (<span class="k">string</span> id) =&gt;
+{
+    Produto? resultado = produtos.FirstOrDefault(p =&gt; p.Id == id);  <span class="c">// LINQ no lugar do foreach</span>
+    <span class="k">if</span> (resultado <span class="k">is null</span>) <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>);
+    produtos.Remove(resultado);
+    <span class="k">return</span> Results.Ok(resultado);
+});
+
+<span class="c">//PUT: /api/produto/alterar/{id}  (id na ROTA + dados novos no CORPO)</span>
+app.MapPut(<span class="s">"/api/produto/alterar/{id}"</span>, (<span class="k">string</span> id, Produto produtoAlterado) =&gt;
+{
+    Produto? resultado = produtos.FirstOrDefault(p =&gt; p.Id == id);
+    <span class="k">if</span> (resultado <span class="k">is null</span>) <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>);
+    resultado.Nome = produtoAlterado.Nome;          <span class="c">// Id e CriadoEm continuam os mesmos</span>
+    resultado.Preco = produtoAlterado.Preco;
+    resultado.Quantidade = produtoAlterado.Quantidade;
+    <span class="k">return</span> Results.Ok(resultado);
+});
+
+<span class="c">//PATCH: /api/produto/estoque/{id}?quantidade=20  (altera SÓ um campo)</span>
+app.MapPatch(<span class="s">"/api/produto/estoque/{id}"</span>, (<span class="k">string</span> id, <span class="k">int</span> quantidade) =&gt;
+{
+    Produto? resultado = produtos.FirstOrDefault(p =&gt; p.Id == id);
+    <span class="k">if</span> (resultado <span class="k">is null</span>) <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>);
+    resultado.Quantidade = quantidade;
+    <span class="k">return</span> Results.Ok(resultado);
+});</pre>
+<div class="box dica"><b class="t">Por que <code>FirstOrDefault</code> funciona para alterar?</b>Ele devolve a <b>referência</b> do objeto que está dentro da lista.
+Alterar <code>resultado.Nome</code> altera o objeto guardado na lista (tipo por referência, §2.5). Por isso não é preciso "salvar de volta".</div>
+<p><b>Por que usar o <code>Id</code> e não o nome para alterar ou remover?</b> Porque o nome pode mudar (é justamente o que o PUT altera) e o Id é o identificador estável e único do recurso.</p>
+
+<!-- ================================================================== -->
+<h2 class="pb">6. Entity Framework Core (persistência)</h2>
+
+<h3>6.1 Conceitos</h3>
+<ul>
+<li><b>Persistência:</b> guardar os dados de forma que sobrevivam ao fim do programa. A <code>List</code> em memória some quando a API para. O banco de dados não.</li>
+<li><b>ORM</b> (Object-Relational Mapping, mapeamento objeto-relacional): converte automaticamente entre <b>objetos</b> C# e <b>tabelas/linhas</b> do banco relacional.
+Classe → tabela. Propriedade → coluna. Objeto → linha. Você escreve LINQ e o ORM gera o SQL.</li>
+<li><b>Entity Framework Core (EF Core)</b>: o ORM oficial do .NET. Funciona com vários bancos por meio de <b>providers</b> (SQLite, SQL Server, MySQL, PostgreSQL).</li>
+<li><b>SQLite:</b> banco que fica num <b>arquivo</b> local (<code>Ecommerce.db</code>), sem servidor para instalar. Bom para estudo.</li>
+<li><b>Code First:</b> você escreve as classes primeiro e o EF gera o banco a partir delas (via <b>migrations</b>).</li>
+</ul>
+
+<h3>6.2 Passo a passo</h3>
+<ol>
+<li>Instalar os pacotes NuGet no projeto:
+<pre>dotnet add package Microsoft.EntityFrameworkCore.Sqlite    <span class="c"># provider do banco</span>
+dotnet add package Microsoft.EntityFrameworkCore.Design    <span class="c"># necessário para migrations</span>
+dotnet tool install --global dotnet-ef                     <span class="c"># ferramenta de linha de comando (uma vez)</span></pre></li>
+<li>Criar o <b>contexto</b> (herda de <code>DbContext</code>):
+<pre><span class="k">using</span> Microsoft.EntityFrameworkCore;
+<span class="k">public class</span> AppDataContext : DbContext
+{
+    <span class="k">public</span> DbSet&lt;Produto&gt; Produtos { <span class="k">get</span>; <span class="k">set</span>; }     <span class="c">// cada DbSet = uma TABELA</span>
+    <span class="k">public</span> DbSet&lt;Categoria&gt; Categorias { <span class="k">get</span>; <span class="k">set</span>; }
+    <span class="k">protected override void</span> OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite(<span class="s">"Data Source=Ecommerce.db"</span>);  <span class="c">// connection string</span>
+    }
+}</pre></li>
+<li>Registrar no <code>Program.cs</code> (<b>injeção de dependência</b>): <code>builder.Services.AddDbContext&lt;AppDataContext&gt;();</code> (antes do <code>builder.Build()</code>).</li>
+<li>Gerar e aplicar a migration (dentro da pasta do projeto):
+<pre>dotnet ef migrations add InicialCriacaoTabelas   <span class="c"># gera a pasta Migrations/ com o código C# que cria as tabelas</span>
+dotnet ef database update                        <span class="c"># executa no banco: cria o Ecommerce.db e as tabelas</span></pre></li>
+<li>Receber o contexto no endpoint: <code>([FromServices] AppDataContext ctx) =&gt; ...</code></li>
+</ol>
+<div class="box"><b class="t">Migration</b>É o "controle de versão" do esquema do banco. Sempre que mudar uma classe (nova propriedade, nova entidade),
+rode <code>migrations add NovoNome</code> e depois <code>database update</code>. A tabela <code>__EFMigrationsHistory</code> registra quais migrations já foram aplicadas.
+<code>dotnet ef migrations remove</code> desfaz a última que ainda não foi aplicada.</div>
+
+<h3>6.3 CRUD com o contexto</h3>
+<table>
+<tr><th>Operação</th><th>Código EF Core</th><th>SQL gerado</th></tr>
+<tr><td>Listar</td><td><code>ctx.Produtos.ToList()</code></td><td><code>SELECT * FROM Produtos</code></td></tr>
+<tr><td>Buscar pela PK</td><td><code>ctx.Produtos.Find(id)</code></td><td><code>SELECT ... WHERE Id = @id</code></td></tr>
+<tr><td>Buscar com filtro</td><td><code>ctx.Produtos.FirstOrDefault(p =&gt; p.Nome == nome)</code></td><td><code>... WHERE Nome = @nome LIMIT 1</code></td></tr>
+<tr><td>Filtrar/ordenar</td><td><code>ctx.Produtos.Where(p =&gt; p.Preco &lt;= max).OrderBy(p =&gt; p.Preco).ToList()</code></td><td><code>WHERE ... ORDER BY ...</code></td></tr>
+<tr><td>Inserir</td><td><code>ctx.Produtos.Add(p); ctx.SaveChanges();</code></td><td><code>INSERT</code></td></tr>
+<tr><td>Alterar</td><td><code>ctx.Produtos.Update(p); ctx.SaveChanges();</code></td><td><code>UPDATE</code></td></tr>
+<tr><td>Remover</td><td><code>ctx.Produtos.Remove(p); ctx.SaveChanges();</code></td><td><code>DELETE</code></td></tr>
+<tr><td>Trazer relacionado</td><td><code>ctx.Produtos.Include(p =&gt; p.Categoria).ToList()</code></td><td><code>LEFT JOIN Categorias</code></td></tr>
+</table>
+<div class="box alerta"><b class="t">SaveChanges()</b><code>Add</code>, <code>Update</code> e <code>Remove</code> só <b>marcam</b> a mudança no <i>change tracker</i>. Nada vai para o banco até chamar
+<code>ctx.SaveChanges()</code>. Esquecer o <code>SaveChanges</code> é o erro nº 1. Um objeto obtido por <code>Find</code> já é rastreado: basta alterar as propriedades e chamar <code>SaveChanges()</code>.</div>
+
+<h3>6.4 Endpoint completo com EF</h3>
+<pre>app.MapPost(<span class="s">"/api/produto/cadastrar"</span>, ([FromBody] Produto produto, [FromServices] AppDataContext ctx) =&gt;
+{
+    <span class="k">if</span> (ctx.Produtos.Any(p =&gt; p.Nome == produto.Nome))
+        <span class="k">return</span> Results.Conflict(<span class="s">"Já existe um produto com o mesmo nome"</span>);
+    ctx.Produtos.Add(produto);
+    ctx.SaveChanges();
+    <span class="k">return</span> Results.Created(<span class="s">$"/api/produto/buscar/{produto.Id}"</span>, produto);
+});
+
+app.MapDelete(<span class="s">"/api/produto/remover/{id}"</span>, ([FromRoute] <span class="k">string</span> id, [FromServices] AppDataContext ctx) =&gt;
+{
+    Produto? produto = ctx.Produtos.Find(id);
+    <span class="k">if</span> (produto <span class="k">is null</span>) <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>);
+    ctx.Produtos.Remove(produto);
+    ctx.SaveChanges();
+    <span class="k">return</span> Results.Ok(produto);
+});</pre>
+
+<h3>6.5 Convenções e Data Annotations</h3>
+<ul>
+<li>Uma propriedade chamada <code>Id</code> ou <code>&lt;Classe&gt;Id</code> vira a <b>chave primária</b> automaticamente (ou use <code>[Key]</code>).</li>
+<li><b>Relacionamento 1:N</b>: <code>public string? CategoriaId { get; set; }</code> (chave estrangeira) + <code>public Categoria? Categoria { get; set; }</code> (propriedade de navegação).</li>
+<li>Tipos anuláveis (<code>string?</code>) viram colunas que aceitam NULL.</li>
+</ul>
+<pre><span class="k">using</span> System.ComponentModel.DataAnnotations;
+<span class="k">public class</span> Produto
+{
+    [Key] <span class="k">public string</span> Id { <span class="k">get</span>; <span class="k">set</span>; } = Guid.NewGuid().ToString();
+    [Required(ErrorMessage = <span class="s">"O nome é obrigatório"</span>)]
+    [MinLength(3)] [StringLength(100)]         <span class="c">// StringLength/MaxLength também limitam a coluna</span>
+    <span class="k">public string</span> Nome { <span class="k">get</span>; <span class="k">set</span>; } = <span class="s">""</span>;
+    [Range(0.01, 100000)] <span class="k">public double</span> Preco { <span class="k">get</span>; <span class="k">set</span>; }
+    [EmailAddress] <span class="k">public string</span>? EmailFornecedor { <span class="k">get</span>; <span class="k">set</span>; }
+}</pre>
+<p>Outras annotations: <code>[MaxLength]</code>, <code>[RegularExpression]</code>, <code>[Compare]</code>, <code>[Phone]</code>, <code>[NotMapped]</code> (não vira coluna), <code>[Table("Nome")]</code>, <code>[Column("nome")]</code>.</p>
+<div class="box alerta"><b class="t">Minimal API não valida sozinha (.NET 8)</b>Nos <i>Controllers</i> com <code>[ApiController]</code> a validação é automática. Na Minimal API do .NET 8 é preciso validar manualmente:
+<pre style="margin-top:4px">List&lt;ValidationResult&gt; erros = <span class="k">new</span>();
+<span class="k">if</span> (!Validator.TryValidateObject(produto, <span class="k">new</span> ValidationContext(produto), erros, <span class="k">true</span>))
+    <span class="k">return</span> Results.BadRequest(erros);   <span class="c">// 400 com a lista de mensagens</span></pre></div>
+
+<h3>6.6 Injeção de dependência (DI)</h3>
+<p>Em vez de o endpoint criar o próprio <code>new AppDataContext()</code>, ele <b>recebe</b> um pronto do framework. O <code>AddDbContext</code> registra o contexto com
+tempo de vida <b>Scoped</b>: uma instância por requisição HTTP, descartada no final. Isso desacopla o código e facilita testes.
+Tempos de vida: <b>Singleton</b> (uma instância para sempre), <b>Scoped</b> (uma por requisição), <b>Transient</b> (uma nova a cada pedido).</p>
+
+<!-- ================================================================== -->
+<h2 class="pb">7. Lista de exercícios: ordenação (Exe06)</h2>
+<p><b>Enunciado:</b> gerar um vetor com 100 números aleatórios e ordená-lo, (a) manualmente e (b) com recurso da linguagem.</p>
+<pre><span class="k">int</span>[] vetor = <span class="k">new int</span>[100];
+Random random = <span class="k">new</span> Random();
+<span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; vetor.Length; i++) vetor[i] = random.Next(1000);
+
+<span class="c">// (a) BUBBLE SORT: compara vizinhos e troca se estiverem fora de ordem</span>
+<span class="k">bool</span> troca;
+<span class="k">do</span>
+{
+    troca = <span class="k">false</span>;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; vetor.Length - 1; i++)   <span class="c">// -1 porque acessa vetor[i + 1]</span>
+    {
+        <span class="k">if</span> (vetor[i] &gt; vetor[i + 1])
+        {
+            troca = <span class="k">true</span>;
+            <span class="k">int</span> aux = vetor[i];                     <span class="c">// troca com variável auxiliar</span>
+            vetor[i] = vetor[i + 1];
+            vetor[i + 1] = aux;
+        }
+    }
+} <span class="k">while</span> (troca);                                  <span class="c">// repete até uma passada sem trocas</span>
+
+<span class="c">// (b) Exe06b: recurso pronto</span>
+Array.Sort(vetor);</pre>
+<div class="box alerta"><b class="t">Erro comum (estava na versão do zip)</b>Só um <code>for</code>, sem o <code>do-while</code>: uma passada leva o <b>maior</b> elemento para o final,
+mas o vetor <b>não</b> fica ordenado. É preciso repetir as passadas (no pior caso, n−1 vezes). Complexidade do Bubble Sort: <b>O(n²)</b>. <code>Array.Sort</code>: <b>O(n log n)</b>.</div>
+<p><b>Teste de mesa</b> de uma passada em <code>[5, 1, 4, 2]</code>: troca 5↔1 → <code>[1,5,4,2]</code>. Troca 5↔4 → <code>[1,4,5,2]</code>. Troca 5↔2 → <code>[1,4,2,5]</code> (houve troca, então repete).
+Segunda passada → <code>[1,2,4,5]</code>. Terceira passada: nenhuma troca, fim.</p>
+
+<!-- ================================================================== -->
+<h2>8. Comandos da CLI (dotnet)</h2>
+<table>
+<tr><th>Comando</th><th>O que faz</th></tr>
+<tr><td><code>dotnet --version</code></td><td>versão do SDK instalada</td></tr>
+<tr><td><code>dotnet new sln -n Ecommerce</code></td><td>cria um arquivo de <b>solução</b> (.sln), que agrupa projetos</td></tr>
+<tr><td><code>dotnet new console -o Exe06a</code></td><td>cria projeto de <b>console</b></td></tr>
+<tr><td><code>dotnet new web -o API</code></td><td>cria projeto <b>web vazio</b> (Minimal API)</td></tr>
+<tr><td><code>dotnet new webapi -o API</code></td><td>cria Web API com exemplo (WeatherForecast) e Swagger</td></tr>
+<tr><td><code>dotnet sln add API</code></td><td>vincula o projeto à solução</td></tr>
+<tr><td><code>dotnet build</code></td><td>compila (mostra erros e warnings)</td></tr>
+<tr><td><code>dotnet run</code> / <code>dotnet watch run</code></td><td>compila e executa / executa reiniciando a cada alteração</td></tr>
+<tr><td><code>dotnet add package &lt;Nome&gt;</code></td><td>instala pacote do <b>NuGet</b> (gerenciador de pacotes do .NET)</td></tr>
+<tr><td><code>dotnet restore</code></td><td>baixa os pacotes listados no .csproj</td></tr>
+<tr><td><code>dotnet tool install --global dotnet-ef</code></td><td>instala a ferramenta do EF</td></tr>
+<tr><td><code>dotnet ef migrations add Nome</code></td><td>cria uma migration</td></tr>
+<tr><td><code>dotnet ef database update</code></td><td>aplica as migrations no banco</td></tr>
+</table>
+<p><b>Arquivos importantes:</b> <code>.sln</code> (solução), <code>.csproj</code> (projeto: framework-alvo <code>net8.0</code>, pacotes), <code>Program.cs</code> (ponto de entrada),
+<code>Properties/launchSettings.json</code> (portas e perfis), <code>appsettings.json</code> (configurações), pastas <code>bin/</code> e <code>obj/</code> (saída da compilação, ficam no <code>.gitignore</code>).</p>
+
+<!-- ================================================================== -->
+<h2 class="pb">9. Pegadinhas de prova</h2>
+<ol>
+<li><code>17 / 5</code> dá <b>3</b> (divisão inteira). Use <code>17 / 5.0</code> ou um cast.</li>
+<li><code>=</code> é atribuição. <code>==</code> é comparação.</li>
+<li>Vetor usa <code>.Length</code>. Lista usa <code>.Count</code>. String usa <code>.Length</code>.</li>
+<li><code>random.Next(1000)</code> vai até <b>999</b>. O limite superior é exclusivo.</li>
+<li><code>for (i = 0; i &lt;= v.Length; i++)</code> estoura o vetor. O certo é <code>&lt;</code>.</li>
+<li>O construtor não tem tipo de retorno (nem <code>void</code>) e tem o mesmo nome da classe.</li>
+<li>Sem <code>virtual</code> na mãe, não há <code>override</code>.</li>
+<li>Criar um objeto de uma classe <code>abstract</code> ou de uma interface com <code>new</code> não é permitido.</li>
+<li>POST <b>não</b> é idempotente. PUT substitui tudo. PATCH altera parte.</li>
+<li>404 = recurso não encontrado (erro do cliente). 500 = erro no servidor. 400 = requisição inválida. 201 = criado.</li>
+<li>No <code>.http</code> falta a linha em branco antes do corpo, ou o <code>Content-Type: application/json</code>, e o corpo chega nulo.</li>
+<li>Código depois de <code>app.Run()</code> não executa (enquanto a API estiver rodando). Serviços são registrados <b>antes</b> do <code>builder.Build()</code>.</li>
+<li>Esquecer <code>ctx.SaveChanges()</code>: nada é gravado.</li>
+<li>Mudou o modelo e não rodou <code>migrations add</code> + <code>database update</code>: erro "no such column/table".</li>
+<li><code>Find</code> só busca pela <b>chave primária</b>. Para outros campos, use <code>FirstOrDefault</code>/<code>Where</code>.</li>
+<li><code>FirstOrDefault</code> devolve <code>null</code> quando não acha, então sempre cheque <code>is null</code> antes de usar.</li>
+<li>LINQ tem execução <b>adiada</b>: a consulta só roda no <code>ToList()</code>, <code>First()</code>, <code>Count()</code> etc.</li>
+<li>Os dados em <code>List</code> na memória somem quando a API reinicia. Por isso existe o EF/banco.</li>
+</ol>
+
+<!-- ================================================================== -->
+<h2>10. Questões de revisão (com gabarito)</h2>
+
+<h3>Objetivas</h3>
+<div class="q"><b>1.</b> Qual método HTTP é o mais indicado para <b>cadastrar</b> um novo produto?<br>a) GET  b) POST  c) PUT  d) DELETE
+<div class="gab">b) POST. Cria um recurso novo e responde 201 Created.</div></div>
+
+<div class="q"><b>2.</b> Uma API responde <b>404</b>. Isso significa:<br>a) sucesso sem conteúdo  b) erro interno do servidor  c) recurso não encontrado  d) requisição criada
+<div class="gab">c) 404 Not Found (erro do cliente, faixa 4xx).</div></div>
+
+<div class="q"><b>3.</b> Qual a diferença entre PUT e PATCH?
+<div class="gab">PUT substitui o recurso inteiro (manda todos os campos). PATCH altera parcialmente (só os campos enviados).</div></div>
+
+<div class="q"><b>4.</b> Em <code>app.MapGet("/api/produto/buscar/{nome}", (string nome) =&gt; ...)</code>, de onde vem <code>nome</code>?<br>a) corpo  b) query string  c) rota  d) cabeçalho
+<div class="gab">c) Rota: o segmento <code>{nome}</code> da URL.</div></div>
+
+<div class="q"><b>5.</b> Qual o resultado de <code>Console.WriteLine(7 / 2 + 7 % 2);</code>?
+<div class="gab">4. <code>7/2 = 3</code> (divisão inteira) e <code>7%2 = 1</code>.</div></div>
+
+<div class="q"><b>6.</b> O que acontece se você chamar <code>ctx.Produtos.Add(p)</code> e não chamar <code>ctx.SaveChanges()</code>?
+<div class="gab">O produto só fica marcado no change tracker. Nenhum INSERT é executado e nada é gravado no banco.</div></div>
+
+<div class="q"><b>7.</b> Qual pilar da POO permite que <code>pessoa.Apresentar()</code> execute a versão de <code>Aluno</code> quando o objeto real é um aluno?
+<div class="gab">Polimorfismo (método <code>virtual</code> na mãe e <code>override</code> na filha).</div></div>
+
+<div class="q"><b>8.</b> Qual comando cria uma migration?<br>a) <code>dotnet ef database update</code>  b) <code>dotnet ef migrations add Nome</code>  c) <code>dotnet new migration</code>  d) <code>dotnet add migration</code>
+<div class="gab">b). O a) aplica as migrations no banco.</div></div>
+
+<div class="q"><b>9.</b> O que é um ORM?
+<div class="gab">Mapeamento objeto-relacional: uma camada que converte automaticamente objetos/classes em linhas/tabelas de um banco relacional e gera o SQL (ex.: Entity Framework Core).</div></div>
+
+<div class="q"><b>10.</b> Qual status deve retornar um cadastro bem-sucedido, e qual método de <code>Results</code> o produz?
+<div class="gab">201 Created, com <code>Results.Created(url, objeto)</code>.</div></div>
+
+<h3>Discursivas / código</h3>
+<div class="q"><b>11.</b> Explique encapsulamento e mostre como validar que o preço de um produto não seja negativo.
+<div class="gab">Encapsulamento é esconder o estado interno (<code>private</code>) e expor acesso controlado. Exemplo:
+<pre style="margin:4px 0">private double _preco;
+public double Preco {
+    get { return _preco; }
+    set { if (value &lt; 0) throw new ArgumentException("Preço negativo"); _preco = value; }
+}</pre></div></div>
+
+<div class="q"><b>12.</b> Escreva um endpoint que devolva apenas os produtos com quantidade maior que zero (lista em memória <code>produtos</code>).
+<div class="gab"><pre style="margin:4px 0">app.MapGet("/api/produto/disponiveis", () =&gt;
+    Results.Ok(produtos.Where(p =&gt; p.Quantidade &gt; 0).ToList()));</pre></div></div>
+
+<div class="q"><b>13.</b> Escreva o endpoint de remoção por id usando Entity Framework.
+<div class="gab"><pre style="margin:4px 0">app.MapDelete("/api/produto/remover/{id}", ([FromRoute] string id, [FromServices] AppDataContext ctx) =&gt; {
+    Produto? p = ctx.Produtos.Find(id);
+    if (p is null) return Results.NotFound("Produto não encontrado!");
+    ctx.Produtos.Remove(p);
+    ctx.SaveChanges();
+    return Results.Ok(p);
+});</pre></div></div>
+
+<div class="q"><b>14.</b> Encontre os erros:
+<pre>app.MapPost("/api/produto/cadastrar", (Produto produto, AppDataContext ctx) =&gt; {
+    ctx.Produtos.Add(produto);
+    return produto;
+});
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext&lt;AppDataContext&gt;();</pre>
+<div class="gab">(1) O endpoint é mapeado antes de existir <code>app</code>, e o <code>AddDbContext</code> tem que vir antes do <code>builder.Build()</code>. A ordem certa é builder → services → Build → Map → Run.
+(2) Falta <code>ctx.SaveChanges()</code>. (3) O ideal é devolver <code>Results.Created(...)</code> com 201, em vez do objeto (que sai como 200).</div></div>
+
+<div class="q"><b>15.</b> Monte o arquivo <code>.http</code> para alterar o produto de id <code>abc</code> com nome "Mouse Gamer" e preço 120.
+<div class="gab"><pre style="margin:4px 0">PUT http://localhost:5195/api/produto/alterar/abc
+Content-Type: application/json
+
+{ "nome": "Mouse Gamer", "preco": 120, "quantidade": 1 }</pre></div></div>
+
+<div class="q"><b>16.</b> Modele: uma <code>Categoria</code> tem vários <code>Produto</code>s. Como fica no EF?
+<div class="gab">Em <code>Produto</code>: <code>public string? CategoriaId { get; set; }</code> (FK) e <code>public Categoria? Categoria { get; set; }</code> (navegação).
+No contexto: <code>DbSet&lt;Categoria&gt; Categorias</code>. Para trazer junto: <code>ctx.Produtos.Include(p =&gt; p.Categoria)</code>. Depois, <code>migrations add</code> + <code>database update</code>.</div></div>
+
+<div class="q"><b>17.</b> Por que a API em memória perde os dados e como o EF resolve?
+<div class="gab">A <code>List&lt;Produto&gt;</code> vive na RAM do processo e some quando a API para. O EF grava num banco (arquivo SQLite, por exemplo), que persiste entre execuções.</div></div>
+
+<!-- ================================================================== -->
+<h2 class="pb">11. Folha de cola final</h2>
+<pre><span class="c">// ===== Program.cs de uma Minimal API com EF =====</span>
+<span class="k">using</span> Microsoft.AspNetCore.Mvc;
+<span class="k">using</span> Microsoft.EntityFrameworkCore;
+
+<span class="k">var</span> builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext&lt;AppDataContext&gt;();
+<span class="k">var</span> app = builder.Build();
+
+app.MapGet(<span class="s">"/api/produto/listar"</span>, ([FromServices] AppDataContext ctx) =&gt;
+    ctx.Produtos.Any() ? Results.Ok(ctx.Produtos.ToList()) : Results.NotFound(<span class="s">"Vazio"</span>));
+
+app.MapGet(<span class="s">"/api/produto/buscar/{id}"</span>, ([FromRoute] <span class="k">string</span> id, [FromServices] AppDataContext ctx) =&gt;
+    ctx.Produtos.Find(id) <span class="k">is</span> Produto p ? Results.Ok(p) : Results.NotFound());
+
+app.MapPost(<span class="s">"/api/produto/cadastrar"</span>, ([FromBody] Produto p, [FromServices] AppDataContext ctx) =&gt;
+{ ctx.Produtos.Add(p); ctx.SaveChanges(); <span class="k">return</span> Results.Created(<span class="s">$"/api/produto/buscar/{p.Id}"</span>, p); });
+
+app.MapPut(<span class="s">"/api/produto/alterar/{id}"</span>, ([FromRoute] <span class="k">string</span> id, [FromBody] Produto novo, [FromServices] AppDataContext ctx) =&gt;
+{
+    Produto? p = ctx.Produtos.Find(id);
+    <span class="k">if</span> (p <span class="k">is null</span>) <span class="k">return</span> Results.NotFound();
+    p.Nome = novo.Nome; p.Preco = novo.Preco; p.Quantidade = novo.Quantidade;
+    ctx.Produtos.Update(p); ctx.SaveChanges(); <span class="k">return</span> Results.Ok(p);
+});
+
+app.MapDelete(<span class="s">"/api/produto/remover/{id}"</span>, ([FromRoute] <span class="k">string</span> id, [FromServices] AppDataContext ctx) =&gt;
+{
+    Produto? p = ctx.Produtos.Find(id);
+    <span class="k">if</span> (p <span class="k">is null</span>) <span class="k">return</span> Results.NotFound();
+    ctx.Produtos.Remove(p); ctx.SaveChanges(); <span class="k">return</span> Results.Ok(p);
+});
+
+app.Run();</pre>
+<table>
+<tr><th>Lembrar</th><th></th></tr>
+<tr><td>Criar API</td><td><code>dotnet new web -o API</code> → <code>dotnet run</code></td></tr>
+<tr><td>EF</td><td>pacotes Sqlite + Design → <code>DbContext</code> + <code>DbSet</code> + <code>UseSqlite</code> → <code>AddDbContext</code> → <code>migrations add</code> → <code>database update</code></td></tr>
+<tr><td>Status</td><td>200 OK · 201 Created · 204 No Content · 400 Bad Request · 404 Not Found · 409 Conflict · 500 Server Error</td></tr>
+<tr><td>Verbos</td><td>GET ler · POST criar · PUT substituir · PATCH alterar parte · DELETE remover</td></tr>
+<tr><td>Parâmetros</td><td>rota <code>{id}</code> · query <code>?x=1</code> · corpo JSON · serviços (DI)</td></tr>
+<tr><td>POO</td><td>classe/objeto · encapsulamento · herança <code>:</code> · polimorfismo <code>virtual/override</code> · interface · abstração</td></tr>
+</table>
+<p class="small" style="margin-top:14px">Material complementar de estudo, montado a partir do Plano de Ensino, do calendário de aulas e dos códigos do repositório da disciplina.
+Os códigos completos, que compilam e foram testados, estão no repositório de estudos que acompanha este PDF.</p>
+</body>
+</html>

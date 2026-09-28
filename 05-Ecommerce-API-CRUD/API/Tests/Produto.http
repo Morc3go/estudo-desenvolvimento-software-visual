@@ -1,0 +1,56 @@
+### Testes da API CRUD em memória (extensão REST Client do VS Code)
+### Clique em "Send Request" acima de cada requisição.
+@url = http://localhost:5195
+
+### Raiz
+GET {{url}}
+
+### Listar
+GET {{url}}/api/produto/listar
+
+### Buscar por nome (parâmetro de rota)
+GET {{url}}/api/produto/buscar/Mouse
+
+### Cadastrar (corpo JSON) -> 201 Created
+# @name cadastro
+POST {{url}}/api/produto/cadastrar
+Content-Type: application/json
+
+{
+    "nome": "Teclado",
+    "preco": 150.0,
+    "quantidade": 5
+}
+
+### Guardamos o id retornado pelo cadastro acima
+@id = {{cadastro.response.body.id}}
+
+### Cadastrar com nome repetido -> 400 Bad Request
+POST {{url}}/api/produto/cadastrar
+Content-Type: application/json
+
+{
+    "nome": "Teclado"
+}
+
+### Buscar por id
+GET {{url}}/api/produto/buscarid/{{id}}
+
+### Alterar (PUT: manda o objeto inteiro)
+PUT {{url}}/api/produto/alterar/{{id}}
+Content-Type: application/json
+
+{
+    "nome": "Teclado Mecânico",
+    "preco": 299.9,
+    "quantidade": 2
+}
+
+### Alterar parcialmente (PATCH: só o estoque, via query string)
+PATCH {{url}}/api/produto/estoque/{{id}}?quantidade=20
+
+### Remover (DELETE)
+DELETE {{url}}/api/produto/remover/{{id}}
+
+### Remover de novo -> 404 Not Found
+DELETE {{url}}/api/produto/remover/{{id}}

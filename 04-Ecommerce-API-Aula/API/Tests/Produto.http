@@ -1,0 +1,20 @@
+### POSTMAN ou INSOMNIA
+### Instalar a extensão REST CLIENT
+### Criar um arquivo .http
+
+### Raiz do Projeto
+GET http://localhost:5195
+
+### Listar Produtos
+GET http://localhost:5195/api/produto/listar
+
+### Buscar produto por nome
+GET http://localhost:5195/api/produto/buscar/Mouse
+
+### Cadastrar Produto
+POST http://localhost:5195/api/produto/cadastrar
+Content-Type: application/json
+
+{
+    "nome" : "Teclado"
+}

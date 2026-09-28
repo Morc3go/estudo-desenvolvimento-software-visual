@@ -1,0 +1,72 @@
+### Testes da API com Entity Framework (REST Client do VS Code)
+### Antes: dotnet ef database update   (cria o arquivo Ecommerce.db)
+@url = http://localhost:5195
+
+### Raiz
+GET {{url}}
+
+### Cadastrar categoria
+# @name categoria
+POST {{url}}/api/categoria/cadastrar
+Content-Type: application/json
+
+{
+    "nome": "Periféricos"
+}
+
+###
+@categoriaId = {{categoria.response.body.id}}
+
+### Listar categorias
+GET {{url}}/api/categoria/listar
+
+### Cadastrar produto COM categoria
+# @name cadastro
+POST {{url}}/api/produto/cadastrar
+Content-Type: application/json
+
+{
+    "nome": "Teclado",
+    "preco": 150.0,
+    "quantidade": 5,
+    "categoriaId": "{{categoriaId}}"
+}
+
+###
+@id = {{cadastro.response.body.id}}
+
+### Cadastrar inválido -> 400 com a lista de erros das Data Annotations
+POST {{url}}/api/produto/cadastrar
+Content-Type: application/json
+
+{
+    "nome": "TV",
+    "preco": 0,
+    "quantidade": -1
+}
+
+### Listar (com Include da categoria)
+GET {{url}}/api/produto/listar
+
+### Buscar por id
+GET {{url}}/api/produto/buscar/{{id}}
+
+### Filtrar por preço (query string)
+GET {{url}}/api/produto/filtrar?precoMaximo=200
+
+### Alterar (PUT)
+PUT {{url}}/api/produto/alterar/{{id}}
+Content-Type: application/json
+
+{
+    "nome": "Teclado Mecânico",
+    "preco": 299.9,
+    "quantidade": 2,
+    "categoriaId": "{{categoriaId}}"
+}
+
+### Alterar estoque (PATCH)
+PATCH {{url}}/api/produto/estoque/{{id}}?quantidade=20
+
+### Remover (DELETE)
+DELETE {{url}}/api/produto/remover/{{id}}
