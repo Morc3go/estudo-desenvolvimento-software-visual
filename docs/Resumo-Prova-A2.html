@@ -51,6 +51,7 @@
     <tr><td>24/08</td><td>Minimal APIs: funcionamento da web, criação do projeto, GET e POST</td><td>§3, §4</td></tr>
     <tr><td>31/08 e 01/09</td><td>Minimal APIs: GET, POST, PUT, PATCH e DELETE</td><td>§4, §5</td></tr>
     <tr><td>14 e 21/09</td><td>Minimal APIs: persistência com Entity Framework</td><td>§6</td></tr>
+    <tr><td>28/09 e 05/10</td><td>Repositório do professor: CRUD completo em lista e depois com banco de dados</td><td>§5.3, §6.7</td></tr>
   </table>
   <ol class="toc">
     <li>Fundamentos de C#</li>
@@ -557,6 +558,64 @@ app.MapDelete(<span class="s">"/api/produto/remover/{id}"</span>, ([FromRoute] <
 tempo de vida <b>Scoped</b>: uma instância por requisição HTTP, descartada no final. Isso desacopla o código e facilita testes.
 Tempos de vida: <b>Singleton</b> (uma instância para sempre), <b>Scoped</b> (uma por requisição), <b>Transient</b> (uma nova a cada pedido).</p>
 
+
+<h3>6.7 Código final do professor (commit de 05/10): CRUD completo com banco</h3>
+<p>É a pasta <code>07-Ecommerce-API-Aula-EF</code> do repositório de estudos. O modelo ganhou a propriedade <b>Valor</b>, e o contexto fica na pasta <code>Data/</code>.</p>
+<div class="box"><b class="t">Os 5 passos da configuração com o banco (comentário do professor)</b>
+<ol style="margin:2px 0">
+<li>Instalar as bibliotecas (<code>Microsoft.EntityFrameworkCore.Sqlite</code> e <code>.Design</code>)</li>
+<li>Criar a classe de dados (<code>Data/AppDataContext.cs</code>)</li>
+<li>Criar a herança com a biblioteca (<code>: DbContext</code>)</li>
+<li>Indicar as classes de modelo que vão virar tabelas (<code>DbSet&lt;Produto&gt; Produtos</code>)</li>
+<li>Sobrescrever o método de configuração com o banco usado e a string de conexão (<code>OnConfiguring</code> + <code>UseSqlite("Data Source=Ecommerce.db")</code>)</li>
+</ol>
+Depois: <code>builder.Services.AddDbContext&lt;AppDataContext&gt;();</code>, <code>dotnet ef migrations add InitialCreate</code> e <code>dotnet ef database update</code>.</div>
+<pre><span class="k">public class</span> Produto
+{
+    <span class="k">public string</span> Id { <span class="k">get</span>; <span class="k">set</span>; } = Guid.NewGuid().ToString();
+    <span class="k">public string</span> Nome { <span class="k">get</span>; <span class="k">set</span>; } = String.Empty;
+    <span class="k">public double</span> Valor { <span class="k">get</span>; <span class="k">set</span>; }                  <span class="c">// NOVA -> exigiu nova migration</span>
+    <span class="k">public</span> DateTime CriadoEm { <span class="k">get</span>; <span class="k">set</span>; } = DateTime.Now;
+}
+
+<span class="c">//POST: cadastrar (procura duplicado com lambda no banco)</span>
+app.MapPost(<span class="s">"/api/produto/cadastrar"</span>,
+    ([FromBody] Produto? produto, [FromServices] AppDataContext ctx) =&gt;
+{
+    <span class="k">if</span> (produto <span class="k">is null</span>) <span class="k">return</span> Results.BadRequest(<span class="s">"O produto não pode ser nulo"</span>);
+    <span class="k">if</span> (produto.Nome == <span class="s">""</span>) <span class="k">return</span> Results.BadRequest(<span class="s">"O nome não pode ser vazio"</span>);
+    Produto? produtoEncontrado = ctx.Produtos.FirstOrDefault(x =&gt; x.Nome == produto.Nome);
+    <span class="k">if</span> (produtoEncontrado <span class="k">is not null</span>) <span class="k">return</span> Results.BadRequest(<span class="s">"Esse produto ja existe!"</span>);
+    ctx.Produtos.Add(produto);
+    ctx.SaveChanges();
+    <span class="k">return</span> Results.Created(<span class="s">""</span>, produto);
+});
+
+<span class="c">//PUT: alterar (Find pela chave primária + Update + SaveChanges)</span>
+app.MapPut(<span class="s">"/api/produto/alterar/{id}"</span>,
+    ([FromRoute] <span class="k">string</span> id, [FromBody] Produto produtoAlterado, [FromServices] AppDataContext ctx) =&gt;
+{
+    Produto? produtoEncontrado = ctx.Produtos.Find(id);
+    <span class="k">if</span> (produtoEncontrado <span class="k">is null</span>) <span class="k">return</span> Results.NotFound(<span class="s">"Produto não encontrado!"</span>);
+    produtoEncontrado.Nome = produtoAlterado.Nome;
+    produtoEncontrado.Valor = produtoAlterado.Valor;
+    ctx.Produtos.Update(produtoEncontrado);
+    ctx.SaveChanges();
+    <span class="k">return</span> Results.Ok(produtoEncontrado);
+});</pre>
+<table>
+<tr><th>Lista em memória (28/09)</th><th>Banco com EF (05/10)</th></tr>
+<tr><td><code>produtos.Count == 0</code></td><td><code>ctx.Produtos.Count() == 0</code></td></tr>
+<tr><td><code>Results.Ok(produtos)</code></td><td><code>Results.Ok(ctx.Produtos.ToList())</code></td></tr>
+<tr><td><code>produtos.FirstOrDefault(x =&gt; x.Id == id)</code></td><td><code>ctx.Produtos.Find(id)</code></td></tr>
+<tr><td><code>produtos.Add(p)</code> / <code>Remove(p)</code></td><td><code>ctx.Produtos.Add(p)</code> / <code>Remove(p)</code> + <code>ctx.SaveChanges()</code></td></tr>
+<tr><td>alterar a propriedade basta (referência)</td><td>alterar + <code>ctx.Produtos.Update(p)</code> + <code>ctx.SaveChanges()</code></td></tr>
+</table>
+<div class="box dica"><b class="t">Mudou o modelo? Nova migration</b>Acrescentar <code>Valor</code> em <code>Produto</code> gerou a migration <code>AddValorTableProduto</code>:
+<code>dotnet ef migrations add AddValorTableProduto</code> e <code>dotnet ef database update</code>. O <code>Up()</code> faz
+<code>AddColumn&lt;double&gt;("Valor", table: "Produtos", type: "REAL", nullable: false, defaultValue: 0.0)</code> e o <code>Down()</code> faz <code>DropColumn</code>.
+O <code>AppDataContextModelSnapshot.cs</code> guarda o retrato atual do modelo, e é por comparação com ele que o EF descobre o que mudou.</div>
+
 <!-- ================================================================== -->
 <h2 class="pb">7. Lista de exercícios: ordenação (Exe06)</h2>
 <p><b>Enunciado:</b> gerar um vetor com 100 números aleatórios e ordená-lo, (a) manualmente e (b) com recurso da linguagem.</p>
@@ -710,6 +769,12 @@ No contexto: <code>DbSet&lt;Categoria&gt; Categorias</code>. Para trazer junto: 
 
 <div class="q"><b>17.</b> Por que a API em memória perde os dados e como o EF resolve?
 <div class="gab">A <code>List&lt;Produto&gt;</code> vive na RAM do processo e some quando a API para. O EF grava num banco (arquivo SQLite, por exemplo), que persiste entre execuções.</div></div>
+
+<div class="q"><b>18.</b> Você acrescentou <code>public double Valor { get; set; }</code> na classe <code>Produto</code>, que já tem tabela no banco. O que precisa fazer para a coluna existir?
+<div class="gab"><code>dotnet ef migrations add AddValorTableProduto</code> (gera o <code>AddColumn</code> no <code>Up()</code>) e <code>dotnet ef database update</code> (aplica). Sem isso, o banco não tem a coluna e dá erro "no such column: Valor".</div></div>
+
+<div class="q"><b>19.</b> Cite os 5 passos da configuração do banco de dados vistos em aula.
+<div class="gab">1) Instalar as bibliotecas; 2) criar a classe de dados; 3) herdar de <code>DbContext</code>; 4) declarar os <code>DbSet</code> das classes que viram tabelas; 5) sobrescrever <code>OnConfiguring</code> com o banco (<code>UseSqlite</code>) e a string de conexão.</div></div>
 
 <!-- ================================================================== -->
 <h2 class="pb">11. Folha de cola final</h2>
