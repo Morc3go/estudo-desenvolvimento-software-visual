@@ -8,12 +8,6 @@ function ProdutoListar() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [mensagem, setMensagem] = useState<string>("");
 
-  // useEffect com [] vazio: roda UMA vez, quando o componente aparece na tela.
-  // É o lugar certo para buscar dados na API.
-  useEffect(() => {
-    carregar();
-  }, []);
-
   async function carregar() {
     try {
       const resposta = await api.get<Produto[]>("/api/produto/listar");
@@ -25,6 +19,12 @@ function ProdutoListar() {
       setMensagem(erro.response?.data ?? "Não foi possível conectar à API. Ela está rodando?");
     }
   }
+
+  // useEffect com [] vazio: roda UMA vez, quando o componente aparece na tela.
+  // É o lugar certo para buscar dados na API.
+  useEffect(() => {
+    carregar();
+  }, []);
 
   async function remover(id: string) {
     if (!confirm("Deseja remover este produto?")) return;
