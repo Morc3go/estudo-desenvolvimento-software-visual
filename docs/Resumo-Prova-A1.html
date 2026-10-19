@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Resumo Prova A1 — Desenvolvimento de Software Visual</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  :root { --azul:#1d4e89; --azul-claro:#e8f0fa; --verde:#1f7a4d; --verde-claro:#e6f4ec; --verm:#a3261b; --verm-claro:#fbeceb; --amar-claro:#fff6dc; --cinza:#555; }
+  * { box-sizing: border-box; }
+  body { font-family: "DejaVu Sans", "Segoe UI", Arial, sans-serif; font-size: 10.2pt; line-height: 1.45; color:#1a1a1a; margin:0; }
+  h1 { font-size: 21pt; color: var(--azul); margin: 0 0 4px; }
+  h2 { font-size: 14.5pt; color: #fff; background: var(--azul); padding: 5px 10px; border-radius: 4px; margin: 20px 0 10px; break-after: avoid; }
+  h3 { font-size: 11.5pt; color: var(--azul); border-bottom: 1.5px solid var(--azul-claro); padding-bottom: 2px; margin: 14px 0 6px; break-after: avoid; }
+  p { margin: 5px 0; }
+  ul, ol { margin: 4px 0 6px; padding-left: 20px; }
+  li { margin: 2px 0; }
+  code { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 8.9pt; background:#f1f3f6; padding: 0 3px; border-radius: 3px; }
+  pre { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size: 8.4pt; line-height: 1.38; background: #1e2430; color: #e6e9ef; padding: 8px 10px; border-radius: 5px; white-space: pre-wrap; margin: 6px 0 8px; break-inside: avoid; }
+  pre .c { color: #8fbf7f; }
+  pre .k { color: #7fb4ff; }
+  pre .s { color: #f0c27a; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.2pt; break-inside: avoid; }
+  th { background: var(--azul-claro); color: var(--azul); text-align: left; }
+  th, td { border: 1px solid #c9d3e0; padding: 3px 6px; vertical-align: top; }
+  .box { border-left: 4px solid var(--azul); background: var(--azul-claro); padding: 6px 10px; border-radius: 0 4px 4px 0; margin: 8px 0; break-inside: avoid; }
+  .dica { border-left-color: var(--verde); background: var(--verde-claro); }
+  .alerta { border-left-color: var(--verm); background: var(--verm-claro); }
+  .box b.t { display:block; margin-bottom: 2px; }
+  .capa { border: 2px solid var(--azul); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .sub { color: var(--cinza); font-size: 10.5pt; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .q { break-inside: avoid; margin: 8px 0; }
+  .gab { background: var(--amar-claro); border: 1px dashed #d6b85a; padding: 4px 8px; border-radius: 4px; margin-top: 3px; font-size: 9.4pt; }
+  .toc { columns: 2; font-size: 9.8pt; }
+  .toc li { margin: 1px 0; }
+  .pb { break-before: page; }
+  .small { font-size: 8.8pt; color: var(--cinza); }
+</style>
+</head>
+<body>
+<div class="capa">
+  <h1>Resumo para a Prova A1</h1>
+  <div class="sub"><b>Desenvolvimento de Software Visual</b>. Ciência da Computação, 4º semestre, 2026/2.<br>
+  Prof. Diogo Steinke Deconto. Prova A1: <b>23/11/2026</b>.</div>
+  <p style="margin-top:8px">A A1 avalia o "resultado final do processo" (Plano de Ensino), então o foco é <b>React consumindo a API em C#</b>, mas a API continua valendo.
+  O conteúdo da A2 está resumido no §12 e completo no <code>Resumo-Prova-A2.pdf</code>.</p>
+  <table>
+    <tr><th>Data</th><th>Aula prevista no calendário</th><th>Neste resumo</th></tr>
+    <tr><td>05/10</td><td>React: introdução ao React e configuração do ambiente</td><td>§1, §2</td></tr>
+    <tr><td>19/10</td><td>React: componentização e estado</td><td>§3 a §6</td></tr>
+    <tr><td>26/10 e 09/11</td><td>React: CRUD com a API em C#</td><td>§7, §8</td></tr>
+    <tr><td>16/11</td><td>React: validações de formulário</td><td>§9</td></tr>
+  </table>
+  <p class="small">Material preparado <b>antes</b> das aulas de React, com base no calendário e no Plano de Ensino (Unidade V: frameworks JavaScript para SPA, layouts
+  responsivos com grids, regras de negócio e validação de formulário). O código completo e testado está em <code>08-React-Ecommerce</code>. Quando as aulas acontecerem,
+  confira se o professor usou as mesmas bibliotecas (ex.: <code>axios</code> ou <code>fetch</code>).</p>
+  <ol class="toc">
+    <li>SPA, React e o ambiente (Node, npm, Vite)</li>
+    <li>Estrutura do projeto e TypeScript básico</li>
+    <li>Componentes e JSX</li>
+    <li>Props</li>
+    <li>Estado (useState) e eventos</li>
+    <li>Listas, keys e renderização condicional</li>
+    <li>useEffect e consumo da API (axios, async/await, CORS)</li>
+    <li>CRUD completo e rotas (React Router)</li>
+    <li>Formulários e validação</li>
+    <li>Layout responsivo</li>
+    <li>Pegadinhas</li>
+    <li>Revisão relâmpago da API (A2)</li>
+    <li>Questões com gabarito</li>
+  </ol>
+</div>
+
+<h2>1. SPA, React e o ambiente</h2>
+<ul>
+<li><b>SPA</b> (Single Page Application): o navegador carrega <b>uma</b> página HTML só, e o JavaScript troca o conteúdo conforme a navegação, sem recarregar a página.
+Os dados vêm da API em JSON. Diferente das páginas tradicionais, em que cada clique pede um HTML novo ao servidor.</li>
+<li><b>React</b>: biblioteca JavaScript (da Meta) para construir interfaces a partir de <b>componentes</b>. Ela mantém um <b>DOM virtual</b>
+(cópia em memória da tela): quando o estado muda, compara a nova versão com a anterior (<i>reconciliação</i>) e atualiza no DOM real só o que mudou.</li>
+<li><b>Front-end × back-end</b>: o React (front) roda no navegador e só exibe e coleta dados. A API C# (back) tem as regras e o banco. Os dois conversam por <b>HTTP + JSON</b>.</li>
+<li><b>Node.js</b>: ambiente que roda JavaScript fora do navegador, necessário para as ferramentas de desenvolvimento. <b>npm</b>: gerenciador de pacotes do Node (equivale ao NuGet do .NET).</li>
+<li><b>Vite</b>: ferramenta que cria o projeto e roda o servidor de desenvolvimento com recarga instantânea (porta padrão <b>5173</b>). Também gera a versão final (<code>npm run build</code> → pasta <code>dist/</code>).</li>
+</ul>
+<table>
+<tr><th>Comando</th><th>O que faz</th><th>Equivalente .NET</th></tr>
+<tr><td><code>npm create vite@latest front -- --template react-ts</code></td><td>cria o projeto React com TypeScript</td><td><code>dotnet new web</code></td></tr>
+<tr><td><code>npm install</code></td><td>baixa as dependências do <code>package.json</code> para <code>node_modules/</code></td><td><code>dotnet restore</code></td></tr>
+<tr><td><code>npm install axios react-router-dom</code></td><td>adiciona bibliotecas</td><td><code>dotnet add package</code></td></tr>
+<tr><td><code>npm run dev</code></td><td>roda em desenvolvimento</td><td><code>dotnet run</code> / <code>watch</code></td></tr>
+<tr><td><code>npm run build</code></td><td>compila para produção</td><td><code>dotnet build</code>/<code>publish</code></td></tr>
+</table>
+<div class="box alerta"><b class="t">node_modules</b>Nunca vai para o Git (está no <code>.gitignore</code>): é enorme e é recriado com <code>npm install</code> a partir do <code>package.json</code>
+(dependências) e do <code>package-lock.json</code> (versões exatas). Ao clonar um projeto React, o primeiro passo é <code>npm install</code>.</div>
+
+<h2>2. Estrutura do projeto e TypeScript básico</h2>
+<pre>front/
+├── index.html          <span class="c">← a ÚNICA página. Tem &lt;div id="root"&gt;&lt;/div&gt;</span>
+├── package.json        <span class="c">← dependências e scripts (dev, build)</span>
+├── vite.config.ts
+└── src/
+    ├── main.tsx        <span class="c">← ponto de entrada: createRoot(...).render(&lt;App /&gt;)</span>
+    ├── App.tsx         <span class="c">← componente raiz (rotas e menu)</span>
+    ├── models/         <span class="c">← interfaces (formato dos dados)</span>
+    ├── services/       <span class="c">← acesso à API</span>
+    └── components/     <span class="c">← componentes .tsx</span></pre>
+<p><b>TypeScript</b> = JavaScript + <b>tipos</b>, verificados na compilação (como no C#). Arquivo <code>.ts</code> é só código e <code>.tsx</code> é código com JSX.</p>
+<div class="grid2">
+<pre><span class="k">let</span> nome: <span class="k">string</span> = <span class="s">"Ana"</span>;
+<span class="k">let</span> idade: <span class="k">number</span> = 20;    <span class="c">// int e double são number</span>
+<span class="k">let</span> ativo: <span class="k">boolean</span> = <span class="k">true</span>;
+<span class="k">let</span> lista: <span class="k">string</span>[] = [<span class="s">"a"</span>, <span class="s">"b"</span>];
+<span class="k">const</span> PI = 3.14;            <span class="c">// const: não reatribui</span>
+<span class="k">function</span> somar(a: <span class="k">number</span>, b: <span class="k">number</span>): <span class="k">number</span> {
+  <span class="k">return</span> a + b;
+}
+<span class="k">const</span> dobro = (x: <span class="k">number</span>) =&gt; x * 2; <span class="c">// arrow function</span></pre>
+<pre><span class="c">// interface = formato de um objeto (como o model do C#)</span>
+<span class="k">export interface</span> Produto {
+  id?: <span class="k">string</span>;      <span class="c">// ? = opcional</span>
+  nome: <span class="k">string</span>;
+  valor: <span class="k">number</span>;
+  criadoEm?: <span class="k">string</span>;
+}
+<span class="c">// JSON da API C# chega em camelCase:</span>
+<span class="c">// { "id": "...", "nome": "Mouse", "valor": 100 }</span>
+<span class="s">`Template string: ${nome}`</span>  <span class="c">// = $"..." do C#</span>
+=== <span class="c">compara valor E tipo (use sempre)</span></pre>
+</div>
+
+<h2>3. Componentes e JSX</h2>
+<p><b>Componente</b> é uma função que devolve <b>JSX</b>. É a unidade de reaproveitamento da tela (botão, formulário, tabela...). A interface vira uma <b>árvore de componentes</b>.</p>
+<pre><span class="k">function</span> Cabecalho() {
+  <span class="k">const</span> titulo = <span class="s">"Ecommerce"</span>;
+  <span class="k">return</span> (
+    &lt;header className=<span class="s">"topo"</span>&gt;          <span class="c">{/* className, não class */}</span>
+      &lt;h1&gt;{titulo}&lt;/h1&gt;               <span class="c">{/* {} insere expressão JS */}</span>
+      &lt;p&gt;Hoje: {<span class="k">new</span> Date().toLocaleDateString()}&lt;/p&gt;
+      &lt;img src=<span class="s">"logo.png"</span> alt=<span class="s">"logo"</span> /&gt;  <span class="c">{/* tags vazias precisam de / */}</span>
+    &lt;/header&gt;
+  );
+}
+<span class="k">export default</span> Cabecalho;
+<span class="c">// uso em outro componente:  import Cabecalho from "./Cabecalho";   &lt;Cabecalho /&gt;</span></pre>
+<div class="box"><b class="t">Regras do JSX</b>
+<ul style="margin:2px 0"><li>O nome do componente começa com <b>letra maiúscula</b> (<code>&lt;Cabecalho /&gt;</code>). Minúscula é tag HTML.</li>
+<li>Devolve <b>um único elemento raiz</b>. Para não criar <code>div</code> extra, use o <b>fragment</b> <code>&lt;&gt; ... &lt;/&gt;</code>.</li>
+<li><code>className</code> no lugar de <code>class</code>, <code>htmlFor</code> no lugar de <code>for</code>. Atributos em camelCase (<code>onClick</code>, <code>onChange</code>).</li>
+<li>Toda tag precisa fechar: <code>&lt;br /&gt;</code>, <code>&lt;input /&gt;</code>. Comentário: <code>{/* ... */}</code>. Estilo inline é objeto: <code>style={{ color: "red" }}</code>.</li></ul></div>
+
+<h2>4. Props</h2>
+<p><b>Props</b> são os "parâmetros" de um componente: dados que o <b>pai</b> passa para o <b>filho</b>. São <b>somente leitura</b> (o filho não altera).
+O fluxo de dados no React é <b>unidirecional</b>: de cima para baixo.</p>
+<pre><span class="k">interface</span> CartaoProps { nome: <span class="k">string</span>; valor: <span class="k">number</span>; onRemover?: () =&gt; <span class="k">void</span>; }
+
+<span class="k">function</span> CartaoProduto({ nome, valor, onRemover }: CartaoProps) {   <span class="c">// desestruturação</span>
+  <span class="k">return</span> (
+    &lt;div&gt;
+      &lt;h3&gt;{nome}&lt;/h3&gt; &lt;p&gt;R$ {valor.toFixed(2)}&lt;/p&gt;
+      {onRemover &amp;&amp; &lt;button onClick={onRemover}&gt;Remover&lt;/button&gt;}
+    &lt;/div&gt;
+  );
+}
+<span class="c">// Pai:</span>
+&lt;CartaoProduto nome=<span class="s">"Mouse"</span> valor={100} onRemover={() =&gt; remover(id)} /&gt;</pre>
+<p class="small">Para o filho "avisar" o pai (de baixo para cima), o pai passa uma <b>função</b> como prop (<code>onRemover</code>) e o filho a chama. Strings vão entre aspas e qualquer outro valor vai entre <code>{}</code>.</p>
+
+<h2>5. Estado (useState) e eventos</h2>
+<p><b>Estado</b> é um dado do componente que, quando muda, faz o React <b>re-renderizar</b> (desenhar de novo) o componente. Uma variável comum não serve: o valor muda, mas a tela não.</p>
+<pre><span class="k">import</span> { useState } <span class="k">from</span> <span class="s">"react"</span>;
+
+<span class="k">function</span> Contador() {
+  <span class="k">const</span> [contador, setContador] = useState&lt;<span class="k">number</span>&gt;(0);   <span class="c">// [valor atual, função que altera] = useState(inicial)</span>
+  <span class="k">return</span> (
+    &lt;div&gt;
+      &lt;h3&gt;{contador}&lt;/h3&gt;
+      &lt;button onClick={() =&gt; setContador(contador + 1)}&gt;+1&lt;/button&gt;
+      &lt;button onClick={() =&gt; setContador(0)}&gt;Zerar&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+<div class="box alerta"><b class="t">Regras de ouro do estado</b>
+<ul style="margin:2px 0">
+<li><b>Nunca</b> altere direto (<code>contador = 5</code> ou <code>produtos.push(p)</code>). Sempre use o <code>set...</code>.</li>
+<li>Para listas e objetos, crie um <b>novo</b>: <code>setProdutos([...produtos, novo])</code>, <code>setProdutos(produtos.filter(p =&gt; p.id !== id))</code>, <code>setProduto({ ...produto, nome: "X" })</code>.</li>
+<li>O <code>set</code> é <b>assíncrono</b>: logo depois de <code>setContador(1)</code>, <code>contador</code> ainda tem o valor antigo naquela execução. Quando o novo depende do anterior: <code>setContador(c =&gt; c + 1)</code>.</li>
+<li><b>Hooks</b> (<code>useState</code>, <code>useEffect</code>...) só podem ser chamados no <b>topo</b> do componente: nunca dentro de <code>if</code>, laço ou função interna.</li>
+</ul></div>
+<h3>Eventos</h3>
+<pre>&lt;button onClick={remover}&gt;          <span class="c">// passa a FUNÇÃO (correto)</span>
+&lt;button onClick={() =&gt; remover(id)}&gt; <span class="c">// precisa de parâmetro: arrow function</span>
+&lt;button onClick={remover(id)}&gt;       <span class="c">// ERRADO: executa na hora de renderizar!</span>
+&lt;input onChange={(e) =&gt; setNome(e.target.value)} /&gt;  <span class="c">// e.target.value = texto digitado (sempre string)</span>
+&lt;form onSubmit={enviar}&gt;  ...  <span class="k">function</span> enviar(e: React.FormEvent) { e.preventDefault(); ... }</pre>
+
+<h2>6. Listas, keys e renderização condicional</h2>
+<pre>&lt;ul&gt;
+  {produtos.map((produto) =&gt; (
+    &lt;li key={produto.id}&gt;{produto.nome} - R$ {produto.valor}&lt;/li&gt;   <span class="c">// key única e estável</span>
+  ))}
+&lt;/ul&gt;
+
+{carregando ? &lt;p&gt;Carregando...&lt;/p&gt; : &lt;Tabela /&gt;}            <span class="c">// if/else</span>
+{erro &amp;&amp; &lt;p className=<span class="s">"erro"</span>&gt;{erro}&lt;/p&gt;}                      <span class="c">// só se erro for "verdadeiro"</span>
+{produtos.length === 0 &amp;&amp; &lt;p&gt;Nenhum produto&lt;/p&gt;}</pre>
+<p><b>key</b> ajuda o React a saber qual item mudou, entrou ou saiu. Deve ser <b>única entre irmãos</b> e <b>estável</b>: use o <code>id</code>, e o índice do <code>map</code> só em último caso.
+Sem key, o console mostra o aviso <i>"Each child in a list should have a unique key prop"</i>.</p>
+<p class="small">Métodos de array mais usados: <code>map</code> (transforma), <code>filter</code> (filtra), <code>find</code> (primeiro que satisfaz, como o <code>FirstOrDefault</code>), <code>some</code> (como o <code>Any</code>), <code>reduce</code> (acumula), <code>sort</code>. Spread: <code>[...lista, novo]</code>, <code>{...obj, campo: x}</code>.</p>
+
+<h2>7. useEffect e consumo da API</h2>
+<p><b>useEffect</b> executa <b>efeitos colaterais</b>, ou seja, o que não é desenhar a tela: buscar dados na API, timers, título da página. O 2º argumento é o <b>array de dependências</b>:</p>
+<table>
+<tr><th>Forma</th><th>Quando roda</th></tr>
+<tr><td><code>useEffect(() =&gt; {...}, [])</code></td><td><b>uma vez</b>, quando o componente aparece (montagem). É o caso típico de "carregar a lista"</td></tr>
+<tr><td><code>useEffect(() =&gt; {...}, [id])</code></td><td>na montagem e sempre que <code>id</code> mudar</td></tr>
+<tr><td><code>useEffect(() =&gt; {...})</code></td><td>depois de <b>toda</b> renderização (cuidado: com <code>set</code> dentro vira laço infinito)</td></tr>
+<tr><td><code>return () =&gt; {...}</code> dentro do efeito</td><td>limpeza (cleanup), ao desmontar. Ex.: <code>clearInterval</code></td></tr>
+</table>
+<pre><span class="c">// services/api.ts</span>
+<span class="k">import</span> axios <span class="k">from</span> <span class="s">"axios"</span>;
+<span class="k">const</span> api = axios.create({ baseURL: <span class="s">"http://localhost:5195"</span> });
+<span class="k">export default</span> api;
+
+<span class="c">// ProdutoListar.tsx</span>
+<span class="k">const</span> [produtos, setProdutos] = useState&lt;Produto[]&gt;([]);
+useEffect(() =&gt; { carregar(); }, []);
+
+<span class="k">async function</span> carregar() {
+  <span class="k">try</span> {
+    <span class="k">const</span> resposta = <span class="k">await</span> api.get&lt;Produto[]&gt;(<span class="s">"/api/produto/listar"</span>);
+    setProdutos(resposta.data);                      <span class="c">// axios já converte o JSON: .data</span>
+  } <span class="k">catch</span> (erro: <span class="k">any</span>) {
+    setMensagem(erro.response?.data);               <span class="c">// texto que a API mandou (ex.: 400/404)</span>
+  }
+}</pre>
+<div class="grid2">
+<div class="box"><b class="t">axios × fetch</b>
+<code>axios.get(url)</code> → <code>resposta.data</code> já é o objeto, e status 4xx/5xx <b>cai no catch</b>.<br>
+<code>fetch(url)</code> é nativo: precisa de <code>await resposta.json()</code>, e 4xx/5xx <b>não</b> geram exceção (é preciso checar <code>resposta.ok</code>). POST com fetch:
+<code>fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(produto) })</code>.</div>
+<div class="box"><b class="t">Promise e async/await</b>Chamada HTTP é <b>assíncrona</b>: devolve uma <b>Promise</b> (um valor que chega depois).
+<code>await</code> espera a Promise e só pode ser usado dentro de função <code>async</code>. Alternativa: <code>.then(r =&gt; ...).catch(e =&gt; ...)</code>.
+O <code>useEffect</code> não pode ser <code>async</code> diretamente, então chame uma função async dentro dele.</div>
+</div>
+<div class="box alerta"><b class="t">CORS</b>React em <code>localhost:5173</code> e API em <code>localhost:5195</code> são <b>origens diferentes</b> (muda a porta). O <b>navegador</b> bloqueia a resposta, a menos que a API libere:
+<pre style="margin-top:4px">builder.Services.AddCors(options =&gt; options.AddPolicy(<span class="s">"Acesso Total"</span>,
+    configs =&gt; configs.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+...
+app.UseCors(<span class="s">"Acesso Total"</span>);   <span class="c">// antes do app.Run()</span></pre>
+Sintoma: <i>"has been blocked by CORS policy"</i> no console do navegador, enquanto no Postman/REST Client tudo funciona (eles não são navegadores).</div>
+
+<h2>8. CRUD completo e rotas</h2>
+<table>
+<tr><th>Ação na tela</th><th>Chamada (axios)</th><th>Endpoint C#</th></tr>
+<tr><td>Listar ao abrir</td><td><code>api.get("/api/produto/listar")</code> no <code>useEffect</code></td><td><code>MapGet</code> → 200 / 400 se vazia</td></tr>
+<tr><td>Cadastrar (form)</td><td><code>api.post("/api/produto/cadastrar", produto)</code></td><td><code>MapPost</code> → 201 / 400</td></tr>
+<tr><td>Carregar p/ editar</td><td><code>api.get(`/api/produto/buscarid/${id}`)</code></td><td><code>MapGet</code> + <code>Find</code> → 200 / 404</td></tr>
+<tr><td>Salvar edição</td><td><code>api.put(`/api/produto/alterar/${id}`, produto)</code></td><td><code>MapPut</code> → 200 / 404</td></tr>
+<tr><td>Remover (botão)</td><td><code>api.delete(`/api/produto/remover/${id}`)</code> e recarregar</td><td><code>MapDelete</code> → 200 / 404</td></tr>
+</table>
+<h3>React Router (navegação na SPA)</h3>
+<pre><span class="k">import</span> { BrowserRouter, Routes, Route, Link, useParams, useNavigate } <span class="k">from</span> <span class="s">"react-router-dom"</span>;
+
+&lt;BrowserRouter&gt;
+  &lt;nav&gt;&lt;Link to=<span class="s">"/"</span>&gt;Listar&lt;/Link&gt; &lt;Link to=<span class="s">"/produto/cadastrar"</span>&gt;Cadastrar&lt;/Link&gt;&lt;/nav&gt;
+  &lt;Routes&gt;
+    &lt;Route path=<span class="s">"/"</span> element={&lt;ProdutoListar /&gt;} /&gt;
+    &lt;Route path=<span class="s">"/produto/cadastrar"</span> element={&lt;ProdutoCadastrar /&gt;} /&gt;
+    &lt;Route path=<span class="s">"/produto/alterar/:id"</span> element={&lt;ProdutoAlterar /&gt;} /&gt;   <span class="c">// :id = parâmetro</span>
+  &lt;/Routes&gt;
+&lt;/BrowserRouter&gt;
+
+<span class="c">// dentro de ProdutoAlterar:</span>
+<span class="k">const</span> { id } = useParams();        <span class="c">// lê o :id da URL</span>
+<span class="k">const</span> navigate = useNavigate();    navigate(<span class="s">"/"</span>);   <span class="c">// redireciona por código</span></pre>
+<p class="small">Use <code>&lt;Link&gt;</code> e não <code>&lt;a href&gt;</code>: o <code>a</code> recarrega a página inteira e perde o estado, ou seja, deixa de ser SPA.</p>
+
+<h2>9. Formulários e validação</h2>
+<pre><span class="k">function</span> ProdutoCadastrar() {
+  <span class="k">const</span> [nome, setNome] = useState(<span class="s">""</span>);
+  <span class="k">const</span> [valor, setValor] = useState(<span class="s">""</span>);
+  <span class="k">const</span> [erros, setErros] = useState&lt;Record&lt;<span class="k">string</span>, <span class="k">string</span>&gt;&gt;({});
+
+  <span class="k">async function</span> enviar(e: React.FormEvent) {
+    e.preventDefault();                                   <span class="c">// impede o reload da página</span>
+    <span class="k">const</span> novos: Record&lt;<span class="k">string</span>, <span class="k">string</span>&gt; = {};
+    <span class="k">if</span> (nome.trim().length &lt; 3) novos.nome = <span class="s">"Mínimo 3 caracteres"</span>;
+    <span class="k">if</span> (!(parseFloat(valor) &gt; 0)) novos.valor = <span class="s">"Valor deve ser maior que zero"</span>;
+    setErros(novos);
+    <span class="k">if</span> (Object.keys(novos).length &gt; 0) <span class="k">return</span>;          <span class="c">// tem erro: não envia</span>
+    <span class="k">try</span> {
+      <span class="k">await</span> api.post(<span class="s">"/api/produto/cadastrar"</span>, { nome, valor: parseFloat(valor) });
+      navigate(<span class="s">"/"</span>);
+    } <span class="k">catch</span> (erro: <span class="k">any</span>) { setMensagem(erro.response?.data); }  <span class="c">// ex.: "Esse produto ja existe!"</span>
+  }
+  <span class="k">return</span> (
+    &lt;form onSubmit={enviar}&gt;
+      &lt;input value={nome} onChange={e =&gt; setNome(e.target.value)} /&gt;
+      {erros.nome &amp;&amp; &lt;span className=<span class="s">"erro"</span>&gt;{erros.nome}&lt;/span&gt;}
+      &lt;input type=<span class="s">"number"</span> value={valor} onChange={e =&gt; setValor(e.target.value)} /&gt;
+      {erros.valor &amp;&amp; &lt;span className=<span class="s">"erro"</span>&gt;{erros.valor}&lt;/span&gt;}
+      &lt;button type=<span class="s">"submit"</span>&gt;Cadastrar&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+<div class="grid2">
+<div class="box dica"><b class="t">Validar nos dois lados</b><b>Front</b>: resposta imediata e menos requisições inúteis (usabilidade). <b>Back</b>: <b>obrigatório</b>, porque o front pode ser burlado (Postman, DevTools).
+A regra de negócio "nome único" só o back sabe verificar (consulta o banco), e o front exibe a mensagem que veio no 400.</div>
+<div class="box"><b class="t">Validação nativa do HTML</b><code>required</code>, <code>minLength</code>, <code>maxLength</code>, <code>min</code>, <code>max</code>, <code>pattern</code>, <code>type="email"</code>/<code>"number"</code>.
+O navegador bloqueia o submit e mostra um balão. <code>noValidate</code> no <code>form</code> desliga isso, para usar a validação própria. Bibliotecas: React Hook Form, Formik, Yup/Zod.</div>
+</div>
+
+<h2>10. Layout responsivo</h2>
+<ul>
+<li><b>Responsivo</b>: o layout se adapta à largura da tela (celular, tablet, desktop). Precisa da meta tag <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> (o Vite já inclui).</li>
+<li><b>Flexbox</b> (uma dimensão): <code>display: flex; flex-direction: row|column; justify-content; align-items; gap; flex-wrap: wrap</code>.</li>
+<li><b>CSS Grid</b> (duas dimensões): <code>display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px</code>. <code>repeat(auto-fit, minmax(200px, 1fr))</code> ajusta sozinho o número de colunas.</li>
+<li><b>Media queries</b>: <code>@media (max-width: 600px) { ... }</code> aplica regras só em telas pequenas. <i>Mobile first</i>: escreve para celular e usa <code>min-width</code> para telas maiores.</li>
+<li><b>Frameworks de grid</b>: <b>Bootstrap</b> (grid de 12 colunas: <code>container</code> → <code>row</code> → <code>col-12 col-md-6 col-lg-4</code>, breakpoints sm/md/lg/xl), <b>Tailwind</b> (classes utilitárias: <code>grid grid-cols-1 md:grid-cols-3</code>), MUI.</li>
+<li>Unidades: <code>px</code> (fixa), <code>%</code>, <code>rem</code> (relativa à fonte da raiz), <code>vw/vh</code> (largura/altura da tela), <code>fr</code> (fração no grid).</li>
+<li><b>Transições e animações</b> (Plano de Ensino): <code>transition: all 0.3s</code> em <code>:hover</code>, e <code>@keyframes</code> + <code>animation</code>.</li>
+</ul>
+<pre>.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 768px) { .grade { grid-template-columns: 1fr; } }   <span class="c">/* 1 coluna no celular */</span>
+.botao { transition: background 0.3s; }  .botao:hover { background: #1d4e89; }</pre>
+
+<h2>11. Pegadinhas</h2>
+<ol>
+<li><code>onClick={remover(id)}</code> executa na renderização. O certo é <code>onClick={() =&gt; remover(id)}</code>.</li>
+<li>Alterar o estado direto (<code>lista.push</code>) não re-renderiza. Use o <code>set</code> com um novo array ou objeto.</li>
+<li><code>useEffect</code> sem <code>[]</code> e com <code>set</code> dentro é laço infinito de requisições.</li>
+<li>Faltou <code>key</code> no <code>map</code>: aparece um aviso e a atualização da lista pode sair errada.</li>
+<li><code>class</code> no JSX é <code>className</code>. Componente com letra minúscula não é reconhecido como componente.</li>
+<li>Esquecer <code>e.preventDefault()</code> no submit: a página recarrega e perde tudo.</li>
+<li><code>e.target.value</code> é sempre <b>string</b>. Converta com <code>parseFloat</code>/<code>Number</code> antes de enviar.</li>
+<li>Erro de CORS é bloqueio do <b>navegador</b>, e a correção é na <b>API</b> (<code>AddCors</code> + <code>UseCors</code>).</li>
+<li>Os nomes das propriedades no JSON são <b>camelCase</b> (<code>nome</code>, <code>valor</code>), não <code>Nome</code>.</li>
+<li><code>&lt;a href&gt;</code> recarrega a página. Na SPA use <code>&lt;Link to&gt;</code>.</li>
+<li>Com axios, os status 400/404 caem no <code>catch</code>. A mensagem da API está em <code>erro.response.data</code>.</li>
+<li><code>await</code> só dentro de <code>async</code>. O callback do <code>useEffect</code> não pode ser <code>async</code>.</li>
+<li>Rodar o React sem a API ligada dá <i>Network Error</i>. Suba primeiro a API (<code>dotnet run</code>) e depois o front (<code>npm run dev</code>).</li>
+</ol>
+
+<h2>12. Revisão relâmpago da API (conteúdo da A2)</h2>
+<table>
+<tr><th>Tema</th><th>Essencial</th></tr>
+<tr><td>Verbos</td><td>GET ler · POST criar · PUT substituir · PATCH alterar parte · DELETE remover</td></tr>
+<tr><td>Status</td><td>200 OK · 201 Created · 204 No Content · 400 Bad Request · 404 Not Found · 409 Conflict · 500 Server Error</td></tr>
+<tr><td>Minimal API</td><td><code>builder</code> → <code>builder.Services.Add...</code> → <code>Build()</code> → <code>app.MapGet/MapPost/MapPut/MapDelete</code> → <code>app.Run()</code></td></tr>
+<tr><td>Parâmetros</td><td><code>[FromRoute]</code> <code>{id}</code> · <code>[FromQuery]</code> <code>?x=1</code> · <code>[FromBody]</code> JSON · <code>[FromServices]</code> DbContext</td></tr>
+<tr><td>EF Core (5 passos)</td><td>pacotes (Sqlite + Design) → classe <code>AppDataContext</code> → <code>: DbContext</code> → <code>DbSet&lt;Produto&gt;</code> → <code>OnConfiguring</code> com <code>UseSqlite("Data Source=Ecommerce.db")</code>; depois <code>AddDbContext</code></td></tr>
+<tr><td>Migrations</td><td><code>dotnet ef migrations add Nome</code> → <code>dotnet ef database update</code>. Mudou o modelo (ex.: <code>Valor</code>) → nova migration</td></tr>
+<tr><td>CRUD EF</td><td><code>ToList()</code>, <code>Find(id)</code>, <code>FirstOrDefault(x =&gt; ...)</code>, <code>Add</code>/<code>Update</code>/<code>Remove</code> + <b><code>SaveChanges()</code></b></td></tr>
+<tr><td>POO</td><td>classe/objeto, propriedades get/set, construtor, encapsulamento, herança <code>:</code>, polimorfismo <code>virtual/override</code>, interface</td></tr>
+<tr><td>Outros do plano</td><td><b>Swagger</b>: documentação interativa da API (pacote Swashbuckle, <code>AddSwaggerGen</code>/<code>UseSwagger</code>/<code>UseSwaggerUI</code>, página <code>/swagger</code>).
+<b>JWT</b>: token assinado (header.payload.signature) que o cliente manda em <code>Authorization: Bearer &lt;token&gt;</code>. <b>Autenticação</b> = quem é você (401). <b>Autorização</b> = o que pode fazer (403)</td></tr>
+</table>
+
+<h2>13. Questões com gabarito</h2>
+<div class="q"><b>1.</b> O que é uma SPA e qual a vantagem?
+<div class="gab">Aplicação de página única: carrega um HTML e o JavaScript troca o conteúdo sem recarregar a página, buscando dados em JSON na API. Navegação mais rápida e fluida, com front e back separados.</div></div>
+<div class="q"><b>2.</b> Diferença entre props e estado?
+<div class="gab">Props vêm do componente pai e são somente leitura. Estado é interno do componente, muda com o <code>set</code> e provoca nova renderização.</div></div>
+<div class="q"><b>3.</b> Por que este código não atualiza a tela? <code>let total = 0; ... &lt;button onClick={() =&gt; total++}&gt;</code>
+<div class="gab">Variável comum não dispara re-renderização. É preciso <code>const [total, setTotal] = useState(0)</code> e <code>setTotal(total + 1)</code>.</div></div>
+<div class="q"><b>4.</b> Quando roda <code>useEffect(() =&gt; { carregar(); }, [])</code>?
+<div class="gab">Uma única vez, quando o componente é montado (aparece na tela). É o lugar de buscar a lista na API.</div></div>
+<div class="q"><b>5.</b> A API funciona no Postman, mas o React mostra "blocked by CORS policy". Por quê e como resolver?
+<div class="gab">Front e API estão em origens diferentes (portas 5173 e 5195), e o navegador bloqueia sem autorização da API. Resolver na API: <code>builder.Services.AddCors(...AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())</code> e <code>app.UseCors("...")</code>.</div></div>
+<div class="q"><b>6.</b> Escreva o código que remove um produto e atualiza a lista sem buscar de novo na API.
+<div class="gab"><pre style="margin:4px 0">async function remover(id: string) {
+  await api.delete(`/api/produto/remover/${id}`);
+  setProdutos(produtos.filter(p =&gt; p.id !== id));
+}</pre></div></div>
+<div class="q"><b>7.</b> Para que serve a <code>key</code> em <code>produtos.map(p =&gt; &lt;li key={p.id}&gt;...)</code>?
+<div class="gab">Identificar cada item de forma única e estável, para o React saber o que foi adicionado, removido ou alterado e atualizar só aquele elemento.</div></div>
+<div class="q"><b>8.</b> Por que validar no front se a API já valida?
+<div class="gab">Pela experiência do usuário: o retorno é imediato e evita requisições desnecessárias. A validação do back continua obrigatória, porque o front pode ser burlado.</div></div>
+<div class="q"><b>9.</b> Como a tela de alterar descobre qual produto editar?
+<div class="gab">A rota tem um parâmetro (<code>/produto/alterar/:id</code>). <code>useParams()</code> lê o <code>id</code>, o <code>useEffect([id])</code> faz <code>GET buscarid/{id}</code> e preenche o estado do formulário. O salvar faz <code>PUT alterar/{id}</code>.</div></div>
+<div class="q"><b>10.</b> Complete: <code>const [produtos, setProdutos] = ______&lt;Produto[]&gt;(___);</code>
+<div class="gab"><code>useState</code> e <code>[]</code> (começa com uma lista vazia).</div></div>
+<div class="q"><b>11.</b> Qual comando baixa as dependências de um projeto React clonado do Git, e por que é necessário?
+<div class="gab"><code>npm install</code>. A pasta <code>node_modules</code> não vai para o Git, e o comando a recria a partir do <code>package.json</code> e do <code>package-lock.json</code>.</div></div>
+<div class="q"><b>12.</b> Encontre 3 erros:
+<pre>function lista() {
+  const [itens, setItens] = useState([]);
+  useEffect(async () =&gt; { const r = await api.get("/api/produto/listar"); itens = r.data; });
+  return &lt;ul class="lista"&gt;{itens.map(i =&gt; &lt;li&gt;{i.nome}&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+<div class="gab">(1) O componente deve começar com maiúscula (<code>Lista</code>). (2) O <code>useEffect</code> não pode ser async e está sem <code>[]</code> (roda sempre). (3) <code>itens = r.data</code> altera o estado direto, então deve ser <code>setItens(r.data)</code>.
+Também: <code>class</code> deve ser <code>className</code> e falta a <code>key</code> no <code>li</code>.</div></div>
+<p class="small" style="margin-top:14px">Material complementar de estudo. O projeto <code>08-React-Ecommerce</code> do repositório de estudos tem todo este código funcionando e testado no navegador.</p>
+</body>
+</html>

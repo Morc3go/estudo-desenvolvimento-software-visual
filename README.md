@@ -5,7 +5,7 @@ prof. Diogo Steinke Deconto), organizado por aula: os códigos vistos em sala, o
 conteúdo extra e explicações: C#, Orientação a Objetos, Minimal APIs e Entity Framework.
 Atualizado com o repositório do professor até o commit **"API - CRUD completo com banco de dados" (05/10)**.
 
-📄 **Resumo para a prova:** [`docs/Resumo-Prova-A2.pdf`](docs/Resumo-Prova-A2.pdf)  
+📄 **Resumos:** [`docs/Resumo-Prova-A2.pdf`](docs/Resumo-Prova-A2.pdf) (C#, POO, API, Entity Framework) · [`docs/Resumo-Prova-A1.pdf`](docs/Resumo-Prova-A1.pdf) (React + revisão da API, prova em 23/11)  
 🗓️ **Aula a aula pelos commits do professor:** [`docs/historico-das-aulas.md`](docs/historico-das-aulas.md)
 
 ## Conteúdo
@@ -19,6 +19,7 @@ Atualizado com o repositório do professor até o commit **"API - CRUD completo 
 | [`05-Ecommerce-API-CRUD`](05-Ecommerce-API-CRUD/API/Program.cs) | 28/09 | **Exercício resolvido**: remoção (DELETE) e alteração (PUT/PATCH), com CRUD completo em lista |
 | [`06-Ecommerce-API-EntityFramework`](06-Ecommerce-API-EntityFramework/API) | extra | Versão ampliada com **EF Core + SQLite**: Data Annotations, relacionamento 1:N (Categoria), PATCH, filtro com LINQ |
 | [`07-Ecommerce-API-Aula-EF`](07-Ecommerce-API-Aula-EF) | 28/09–05/10 | **Código final do professor**: CRUD completo com banco (EF Core + SQLite), 2 migrations, com explicação do que mudou |
+| [`08-React-Ecommerce`](08-React-Ecommerce) | 05/10–16/11 | **Adiantado**: front-end React (Vite + TypeScript) com CRUD consumindo a API do professor, componentes, props, estado, useEffect, rotas e validação de formulário |
 | [`docs/`](docs) | — | Resumo em PDF (teoria, pegadinhas, questões com gabarito) e histórico das aulas |
 
 ## Como rodar
@@ -26,7 +27,8 @@ Atualizado com o repositório do professor até o commit **"API - CRUD completo 
 ### 1. Pré-requisitos
 - [.NET SDK 8](https://dotnet.microsoft.com/download/dotnet/8.0). Confira com `dotnet --version`.
 - [VS Code](https://code.visualstudio.com/) com as extensões **C# Dev Kit** e **REST Client** (para os arquivos `.http`).
-- Só para o projeto 06: a ferramenta de migrations
+- Só para o projeto 08: [Node.js](https://nodejs.org/) LTS (vem com o `npm`).
+- Só para os projetos 06, 07 e 08: a ferramenta de migrations
   ```bash
   dotnet tool install --global dotnet-ef
   ```
@@ -60,6 +62,9 @@ cd 07-Ecommerce-API-Aula-EF/API      # ou 06-Ecommerce-API-EntityFramework/API
 dotnet ef database update     # aplica a migration e cria o arquivo Ecommerce.db
 dotnet run
 ```
+
+### 4. React (08)
+Veja o passo a passo em [`08-React-Ecommerce/README.md`](08-React-Ecommerce/README.md): a API roda num terminal (`dotnet run`) e o React em outro (`npm install` e depois `npm run dev`, em http://localhost:5173).
 
 ## Como os projetos foram criados (CLI)
 ```bash

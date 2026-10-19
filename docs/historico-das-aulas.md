@@ -59,5 +59,6 @@ return Results.Ok(produtoEncontrado);
 ## Próximas aulas (pelo calendário)
 
 Depois da API, o plano de aula segue para **React**: introdução e configuração do ambiente, componentização e estado,
-CRUD consumindo a API em C# e validação de formulários. A **Prova A1** está marcada para **23/11**. Quando esses
-commits aparecerem no repositório do professor, dá para acrescentar as pastas aqui do mesmo jeito.
+CRUD consumindo a API em C# e validação de formulários. A **Prova A1** está marcada para **23/11**.
+Esse conteúdo já está **adiantado** em [`08-React-Ecommerce`](../08-React-Ecommerce) e em [`Resumo-Prova-A1.pdf`](Resumo-Prova-A1.pdf).
+Quando os commits de React aparecerem no repositório do professor, eles entram aqui do mesmo jeito.
